@@ -4,5 +4,6 @@ block content
   h1= title
   p Welcome to #{title}
   form(action="/", method="POST")
-    input(type="text") 
+    input(name="fromEmail" type="email", placeholder="From email") 
+    input(name="toEmail" type="email", placeholder="To email") 
     button(type="submit") Send
