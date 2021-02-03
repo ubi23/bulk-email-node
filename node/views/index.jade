@@ -1,9 +1,31 @@
 extends layout
 
+let s = "Separate senders"
+
 block content
   h1= title
   p Welcome to #{title}
-  form(action="/", method="POST")
-    input(name="fromEmail" type="email", placeholder="From email") 
-    input(name="toEmail" type="email", placeholder="To email") 
-    button(type="submit") Send
+  form(name="sendEmail", action="/", method="POST")
+    div
+      input(name="filename", type="file", placeholder="Please select a file")
+    div
+      input(name="fromEmail", type="email", placeholder="From email") 
+    div
+      input(name="fromName", type="text", placeholder="From name") 
+    div
+      input(name="templateID", type="text", placeholder="Template ID")
+    div
+      input(name="subject", type="text", placeholder="Subject")
+    div
+      input(name="category", type="text", placeholder="Category")
+    div
+      span 
+        | Separate senders
+      span
+        input(name="isSeparate", type="radio", value="0", checked) 
+        | No 
+      span
+        input(name="isSeparate", type="radio", value="1") 
+        | Yes
+    div
+      button(type="submit") Send
