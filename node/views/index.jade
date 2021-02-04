@@ -5,7 +5,7 @@ let s = "Separate senders"
 block content
   h1= title
   p Welcome to #{title}
-  form(name="sendEmail", action="/", method="POST")
+  form(name="sendEmail", action="/", method="POST", enctype="multipart/form-data")
     div
       input(name="filename", type="file", placeholder="Please select a file")
     div
@@ -28,4 +28,4 @@ block content
         input(name="isSeparate", type="radio", value="1") 
         | Yes
     div
-      button(type="submit") Send
+      button(type="submit", name="file") Send
