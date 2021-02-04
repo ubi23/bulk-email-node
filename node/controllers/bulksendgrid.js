@@ -22,13 +22,9 @@ exports.send = function(req, res) {
     category: category,
     isSeparatedSenders: isSeparatedSenders
   };
-  console.log(req.file, "----------\n");
-  console.log(req.body, "-----------\n");
-  console.log(req.files);
-  let csvRows = parseCSV.processCSVFile(req, res);
   
-  console.log("bulksendgrid -> ",csvRows);
-  //TODO for loop to retrieve recipients email and store that into the array
+  
+  let csvRows = parseCSV.processCSVFile(req, res);
   //let recipients = retrieveRecipients(csvRows)
 
   //sendgridController.sendEmail(recipients, data)
@@ -44,7 +40,15 @@ exports.send = function(req, res) {
 */
 function retrieveRecipients(csvRows){
   //TODO
-
+  let recipients = [];
+  fileRows.forEach(unsub_person => {
+    let firsName = unsub_person.first_name;
+    let lastName = unsub_person.last_name;
+    let email = unsub_person.email;
+    var person1 = new Person(firsName, lastName, email);
+    recipients.push(person1);
+  });
+  return recipients;
 }
 
 /*let p = new Person("Ubaid", "Khan", "u.khan@equalsmoney.com");
