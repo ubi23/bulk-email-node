@@ -4,7 +4,7 @@ let person = require('./person');
 let Person = person.Person
 
 
-exports.send = function(req, res) {
+exports.send = async function(req, res) {
   
   var fromEmail = req.body.fromEmail;
   var fromName = req.body.fromName;
@@ -23,25 +23,26 @@ exports.send = function(req, res) {
     isSeparatedSenders: isSeparatedSenders
   };
   
+  try {
+    const csvRows = await parseCSV.processCSVFile(req, res);
+    let recipients = retrieveRecipients(csvRows); //[Person1, Person2, ..., PersonN ]
+    sendgridController.sendEmail(recipients, data)
+  } catch(error) {
+    console.error(error);
+    // TODO possibly send a error response message
+  }
   
-  let csvRows = parseCSV.processCSVFile(req, res);
-  //let recipients = retrieveRecipients(csvRows)
-
-  //sendgridController.sendEmail(recipients, data)
-
   res.redirect('/');
-
-  
   return 0;
 }
+
 
 /* 
   return array with recipient's emails
 */
 function retrieveRecipients(csvRows){
-  //TODO
   let recipients = [];
-  fileRows.forEach(unsub_person => {
+  csvRows.forEach(unsub_person => {
     let firsName = unsub_person.first_name;
     let lastName = unsub_person.last_name;
     let email = unsub_person.email;
@@ -51,13 +52,3 @@ function retrieveRecipients(csvRows){
   return recipients;
 }
 
-/*let p = new Person("Ubaid", "Khan", "u.khan@equalsmoney.com");
-  console.log("from email ", fromEmail);
-  console.log("from name ", fromName);
-  console.log("template id", templateID);
-  console.log("filename: ", filename);
-  console.log("subject: ", subject);
-  console.log("category: ", category);
-  console.log("Separate senders: ", isSeparatedSenders);
-  console.log("Her name's " + p.name + " and email's " + p.email);
-  console.log("data templateID: ", data.templateID);*/
