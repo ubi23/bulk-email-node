@@ -1,35 +1,30 @@
 // import parseCSV file
 let parseCSV = require('./parseCSV.controllers');
+let sendgridController = require('./sendgrid.controllers');
 let person = require('./person');
 let Person = person.Person
 
 
+
 exports.send = async function(req, res) {
   
-  var fromEmail = req.body.fromEmail;
-  var fromName = req.body.fromName;
-  var templateID = req.body.templateID;
-  var filename = req.body.filename;
-  var subject = req.body.subject;
-  var category = req.body.category;
-  var isSeparatedSenders = req.body.isSeparate; 
   var data = {
-    fromEmail: fromEmail,
-    fromName: fromName,
-    templateID: templateID,
-    filename: filename,
-    subject: subject,
-    category: category,
-    isSeparatedSenders: isSeparatedSenders
+    fromEmail : req.body.fromEmail,
+    fromName : req.body.fromName,
+    templateID : req.body.templateID,
+    filename : req.body.filename,
+    subject : req.body.subject,
+    category : req.body.category,
+    isSeparatedSenders : req.body.isSeparate
   };
   
   try {
     const csvRows = await parseCSV.processCSVFile(req, res);
     let recipients = retrieveRecipients(csvRows); //[Person1, Person2, ..., PersonN ]
-    sendgridController.sendEmail(recipients, data)
+    console.log(recipients);
+    //sendgridController.sendEmail(recipients, data)
   } catch(error) {
     console.error(error);
-    // TODO possibly send a error response message
   }
   
   res.redirect('/');
@@ -38,11 +33,12 @@ exports.send = async function(req, res) {
 
 
 /* 
-  return array with recipient's emails
+  return array with recipient's people -> [Person1, ..., PersonN]
 */
 function retrieveRecipients(csvRows){
   let recipients = [];
   csvRows.forEach(unsub_person => {
+    console.log(unsub_person);
     let firsName = unsub_person.first_name;
     let lastName = unsub_person.last_name;
     let email = unsub_person.email;

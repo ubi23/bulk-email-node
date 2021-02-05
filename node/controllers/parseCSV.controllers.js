@@ -1,10 +1,5 @@
 const fs = require('fs');
 const csv = require('fast-csv');
-let person = require('./person');
-const { rejects } = require('assert');
-const { resolve } = require('path');
-let Person = person.Person
-
 
 
 exports.processCSVFile =  async function(req, res) {
@@ -23,13 +18,3 @@ exports.processCSVFile =  async function(req, res) {
   .catch(err => {throw  err});
 }
 
-/*let recipients = [];
-    fileRows.forEach(unsub_person => {
-      let firsName = unsub_person.first_name;
-      let lastName = unsub_person.last_name;
-      let email = unsub_person.email;
-      var person1 = new Person(firsName, lastName, email);
-      recipients.push(person1);
-    });
-
-    console.log("recipients ", recipients);*/
