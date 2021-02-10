@@ -9,6 +9,15 @@ block content
     div
       input(name="filename", type="file", placeholder="Please select a file")
     div
+      span 
+        | Save file
+      span
+        input(name="saveFile", type="radio", value="0", checked) 
+        | No 
+      span
+        input(name="saveFile", type="radio", value="1") 
+        | Yes
+    div
       input(name="fromEmail", type="email", placeholder="From email") 
     div
       input(name="fromName", type="text", placeholder="From name") 

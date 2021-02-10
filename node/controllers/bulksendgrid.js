@@ -21,7 +21,7 @@ exports.send = async function(req, res) {
   try {
     const csvRows = await parseCSV.processCSVFile(req, res);
     let recipients = retrieveRecipients(csvRows); //[Person1, Person2, ..., PersonN ]
-    console.log(recipients);
+    //console.log(recipients);
     //sendgridController.sendEmail(recipients, data)
   } catch(error) {
     console.error(error);
@@ -38,7 +38,7 @@ exports.send = async function(req, res) {
 function retrieveRecipients(csvRows){
   let recipients = [];
   csvRows.forEach(unsub_person => {
-    console.log(unsub_person);
+    //console.log(unsub_person);
     let firsName = unsub_person.first_name;
     let lastName = unsub_person.last_name;
     let email = unsub_person.email;

@@ -9,8 +9,11 @@ exports.processCSVFile =  async function(req, res) {
     .on("data", function(data){
       fileRows.push(data); // push each row
     })
-    .on("end", function(){  
-      fs.unlinkSync(req.file.path); // remove temp file
+    .on("end", function(){ 
+      var saveFile = req.body.saveFile;
+      if(saveFile == 0) // if user decided to not save the file
+        fs.unlinkSync(req.file.path); // remove temp file
+      
       resolve(fileRows); // promise's done
     })
     .on("error", error => reject(error));  
