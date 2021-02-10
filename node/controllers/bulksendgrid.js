@@ -1,9 +1,7 @@
-// import parseCSV file
-let parseCSV = require('./parseCSV.controllers');
-let sendgridController = require('./sendgrid.controllers');
-let person = require('./person');
-let Person = person.Person
-
+const parseCSV = require('./parseCSV.controllers');
+const sendgridController = require('./sendgrid.controllers');
+const person = require('./person');
+const Person = person.Person
 
 
 exports.send = async function(req, res) {
@@ -19,26 +17,25 @@ exports.send = async function(req, res) {
   };
   
   try {
-    const csvRows = await parseCSV.processCSVFile(req, res);
+    let csvRows = await parseCSV.processCSVFile(req, res); // retrieve rows in CSV file [row1, ..., rowN]
     let recipients = retrieveRecipients(csvRows); //[Person1, Person2, ..., PersonN ]
-    //console.log(recipients);
-    //sendgridController.sendEmail(recipients, data)
+    sendgridController.sendEmail(recipients, data); // send emails
   } catch(error) {
     console.error(error);
   }
-  
+
+      
   res.redirect('/');
   return 0;
 }
 
 
 /* 
-  return array with recipient's people -> [Person1, ..., PersonN]
+  return array with recipient's -> [Person1, ..., PersonN]
 */
 function retrieveRecipients(csvRows){
   let recipients = [];
   csvRows.forEach(unsub_person => {
-    //console.log(unsub_person);
     let firsName = unsub_person.first_name;
     let lastName = unsub_person.last_name;
     let email = unsub_person.email;
@@ -47,4 +44,3 @@ function retrieveRecipients(csvRows){
   });
   return recipients;
 }
-

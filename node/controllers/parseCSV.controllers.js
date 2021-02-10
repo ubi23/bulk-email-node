@@ -6,8 +6,8 @@ exports.processCSVFile =  async function(req, res) {
   return new Promise((resolve, reject) =>  {
     const fileRows = [];
     csv.parseFile(req.file.path, {trim: true, headers:true})
-    .on("data", function(data){
-      fileRows.push(data); // push each row
+    .on("data", function(row){
+      fileRows.push(row); 
     })
     .on("end", function(){ 
       var saveFile = req.body.saveFile;
