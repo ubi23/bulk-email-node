@@ -5,7 +5,6 @@ sgMail.setSubstitutionWrappers('--', '--');
 
 module.exports.sendEmail = (recipients, data) => {
   
-  // TODO
   const personalizations = createPersonalization(recipients);
   
   const msg = {
@@ -52,7 +51,7 @@ function createPersonalization(recipients){
     personalizations.push(
       {
         'to': [recipient],
-        'substitutions': {'firstName': recipient.name}
+        'substitutions': {'firstName': recipient.firstName}
       }
     );
   });
