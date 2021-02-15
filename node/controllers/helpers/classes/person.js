@@ -27,7 +27,7 @@ class Person {
    */
   isValidEmail(email){
     // expecting a string
-    if(typeof email !== string){
+    if(typeof email !== 'string'){
       throw new Error('Expecting a string as an email');
     }
 
@@ -40,4 +40,6 @@ class Person {
 }
 
 // Export class 
-module.exports = Person;
+module.exports = {
+  Person: Person
+};
