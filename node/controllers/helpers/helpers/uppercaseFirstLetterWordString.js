@@ -1,6 +1,6 @@
 /**
  * Make the first letter of each word in a string uppercase 
- * an lowercase the rest. 
+ * and lowercase the rest. 
  */
 module.exports = function uppercaseWordsString(str){
     // expecting a string

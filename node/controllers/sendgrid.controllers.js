@@ -1,12 +1,24 @@
+/**
+ * Dependencies
+ */
 const sgMail = require('@sendgrid/mail');
+
+// set the API Key from environment variables
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+// set the wrappers for substitution 
 sgMail.setSubstitutionWrappers('--', '--');
 
 
+/**
+ * Send emails through the SendGrid API
+ */
 module.exports.sendEmail = (recipients, data) => {
   
+  // contains substitutions for each recipient
   const personalizations = createPersonalization(recipients);
   
+  // message object to be passed to the API
   const msg = {
     personalizations: personalizations,
     from: {email: data.fromEmail, name: data.fromName}, 

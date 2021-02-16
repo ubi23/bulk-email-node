@@ -1,11 +1,25 @@
 const parseCSV = require('./parseCSV.controllers');
 const sendgridController = require('./sendgrid.controllers');
-const person = require('./person');
+const handleValidationResult = require('./helpers/helpers/validate-form');
+const person = require('./helpers/classes/person');
 const Person = person.Person
+
+
 
 
 exports.send = async function(req, res) {
   
+  const { isInternalServerError, hasValidationFailed, errors } = handleValidationResult(req); 
+  if (isInternalServerError === true){
+    return res.sendStatus(500);
+  }
+  if (hasValidationFailed === true){
+    return res.render('index', { formData: req.body, errors: errors});
+  } 
+
+  // success
+  res.render('index', {success: 'oh I sent few emails', });
+  return;
   var data = {
     fromEmail : req.body.fromEmail,
     fromName : req.body.fromName,
@@ -24,15 +38,15 @@ exports.send = async function(req, res) {
     console.error(error);
   }
 
-      
+  
   res.redirect('/');
   return 0;
 }
 
 
-/* 
-  return array with recipient's -> [Person1, ..., PersonN]
-*/
+/**
+ * return array with recipient's -> [Person1, ..., PersonN]
+ */
 function retrieveRecipients(csvRows){
   let recipients = [];
   csvRows.forEach(unsub_person => {

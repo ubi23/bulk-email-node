@@ -16,15 +16,15 @@ block content
         input(name="saveFile", type="radio", value="1") 
         | Yes
     div
-      input(name="fromEmail", type="email", placeholder="From email") 
+      input(name="fromEmail", type="email", placeholder="From email", value=(undefined===formData ? '' : formData.fromEmail)) 
     div
-      input(name="fromName", type="text", placeholder="From name") 
+      input(name="fromName", type="text", placeholder="From name", value=(undefined===formData ? '' : formData.fromName)) 
     div
-      input(name="templateID", type="text", placeholder="Template ID")
+      input(name="templateID", type="text", placeholder="Template ID", value=(undefined===formData ? '' : formData.templateID))
     div
-      input(name="subject", type="text", placeholder="Subject")
+      input(name="subject", type="text", placeholder="subject", value=(undefined===formData ? '' : formData.subject))
     div
-      input(name="category", type="text", placeholder="Category")
+      input(name="category", type="text", placeholder="category", value=(undefined===formData ? '' : formData.category))
     div
       span 
         | Separate senders
@@ -36,3 +36,13 @@ block content
         | Yes
     div
       button(type="submit", name="file") Send
+  if errors 
+    script console.log(#{errors})
+    for error in errors
+      div 
+        span 
+          | #{error.msg}
+        
+  if success  
+    span 
+      | #{success}
