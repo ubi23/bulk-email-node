@@ -53,7 +53,7 @@ module.exports = async function(req, res) {
     return 0;
   } catch(error) {
     console.error(error);
-    res.render('index', {success: 'An error occurred while processing the data!', }); // may want to change the key to a proper name rather than success
+    res.render('index', {successFailed: 'An error occurred while processing the data!', }); // may want to change the key to a proper name rather than success
     return 1;
   }
 }

@@ -1,48 +1,89 @@
-extends layout
+doctype html
+html(lang='en')
+  include common/head.jade
+  +head("Bulk Email")
+  body  
+    header
+      include common/navbar.jade
+      +navbar()
+      .container 
+        .row
+          .col-sm-12.offset-md-2.col-md-8
+            .jumbotron
+              h2.text-center Bulk Email
+              .row
+                .col-sm-12.col-md-12
+                  form(name="sendEmail", action="/", method="POST", enctype="multipart/form-data")
+                    div.formgroup
+                      .input-group.mb-3
+                        input(name="filename", type="file", placeholder="Please select a file").form-control
+                      
+                      .input-group.mb-3
+                        label.small.mb-1.mt-3 Save file:
+                            input(name="saveFile", type="radio", value="0", checked)
+                            input(name="saveFile", type="radio", value="1")
 
-block content
-  h1= title
-  p Welcome to #{title}
-  form(name="sendEmail", action="/", method="POST", enctype="multipart/form-data")
-    div
-      input(name="filename", type="file", placeholder="Please select a file")
-    div
-      span 
-        | Save file
-      span
-        input(name="saveFile", type="radio", value="0", checked) 
-        | No 
-      span
-        input(name="saveFile", type="radio", value="1") 
-        | Yes
-    div
-      input(name="fromEmail", type="email", placeholder="From email", value=(undefined===formData ? '' : formData.fromEmail)) 
-    div
-      input(name="fromName", type="text", placeholder="From name", value=(undefined===formData ? '' : formData.fromName)) 
-    div
-      input(name="templateID", type="text", placeholder="Template ID", value=(undefined===formData ? '' : formData.templateID))
-    div
-      input(name="subject", type="text", placeholder="subject", value=(undefined===formData ? '' : formData.subject))
-    div
-      input(name="category", type="text", placeholder="category", value=(undefined===formData ? '' : formData.category))
-    div
-      span 
-        | Separate senders
-      span
-        input(name="isSeparate", type="radio", value="0", checked) 
-        | No 
-      span
-        input(name="isSeparate", type="radio", value="1") 
-        | Yes
-    div
-      button(type="submit", name="file") Send
-  if errors 
-    script console.log(#{errors})
-    for error in errors
-      div 
-        span 
-          | #{error.msg}
+
+
+                      label.small.mb-1.mt-3 From email: 
+                      input(name="fromEmail", type="email", placeholder="From email", value=(undefined===formData ? '' : formData.fromEmail)).form-control
+                      if (errors)
+                        for error in errors
+                          if error.param == 'fromEmail'
+                            p.small.text-danger #{error.msg}
+                      
+
+                      label.small.mb-1.mt-3 From name: 
+                      input(name="fromName", type="text", placeholder="From name", value=(undefined===formData ? '' : formData.fromName)).form-control
+                      if (errors)
+                        for error in errors
+                          if error.param == 'fromName'
+                            p.small.text-danger #{error.msg}
+
+                      label.small.mb-1.mt-3 Template ID: 
+                      input(name="templateID", type="text", placeholder="Template ID", value=(undefined===formData ? '' : formData.templateID)).form-control
+                      if (errors)
+                        for error in errors
+                          if error.param == 'templateID'
+                            p.small.text-danger #{error.msg}
+
+
+                      label.small.mb-1.mt-3 Subject: 
+                      input(name="subject", type="text", placeholder="Subject", value=(undefined===formData ? '' : formData.subject)).form-control
+                      if (errors)
+                        for error in errors
+                          if error.param == 'subject'
+                            p.small.text-danger #{error.msg}
+
+                      label.small.mb-1.mt-3 Categories: 
+                      input(name="category", type="text", placeholder="category", value=(undefined===formData ? '' : formData.category)).form-control
+                      
+
+                      .input-group.mb-3
+                        label.small.mb-1.mt-3 Separate senders:
+                          input(name="isSeparate", type="radio", value="0", checked)
+                          input(name="isSeparate", type="radio", value="1")
+
+
+
+
+
+
+                      button.mt-3.btn.btn-primary(type='submit').form-control Send
+    include common/footer.jade
+    +footer()
+ 
+    if success 
+     div.alert.alert-success #{success}
+
+    if successFailed
+      div.alert.alert-danger #{successFailed}
+
+      
+    
+      
+    
+    
+  
         
-  if success  
-    span 
-      | #{success}
+  

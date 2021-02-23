@@ -1,0 +1,12 @@
+mixin navbar() 
+  nav.navbar.navbar-expand.navbar-custom
+    .container
+      a(href='/', aria-label='Equals Money').navbar-brand.mr-0
+      .mr-md-2 
+        img(src="/images/equals.svg", width='184' height='60')
+      .collapse.navbar-collapse.justify-content-end
+        ul.navbar-nav
+          li.nav-item.navbar-text
+            a.nav-link(href='/') Home 
+          li.nav-item.navbar-text
+            a.nav-link(href='/history') History
