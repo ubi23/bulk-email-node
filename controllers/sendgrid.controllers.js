@@ -26,19 +26,45 @@ module.exports.sendBulkEmails = (data, recipients) => {
     recipients.forEach((dealerData, dealerEmail) => {
       // Change the from value to be the dealer's name and email rather than what was provided in the form
       data.from = { email: dealerEmail, name: dealerData.dealerName};
-      data.recipients = dealerData.recipients;
-      const msg = new Message(data);
+      let dealerRecipients = dealerData.recipients;
+
+      if (dealerRecipients.length <= 1000){
+        data.recipients = dealerRecipients;
+        const msg = new Message(data);
+        sendEmails(msg.toJSON());
+      } else {
+
+        for (let i = 0; i < dealerRecipients.length; i += 1000){
+          let chunkedRecipients = dealerRecipients.slice(i, i+1000);
+          data.recipients = chunkedRecipients;
+          const msg = new Message(data);
+          console.log('sending to -> ' ,msg.toJSON())
+          sendEmails(msg.toJSON());
+        }
+      }
       
-      sendEmails(msg.toJSON());
     });
 
   } else {
 
     // same sender for all emails
-    data.recipients = recipients;
-    const msg = new Message(data);
-    
-    sendEmails(msg.toJSON());
+
+    // checking if recipients are 1000 or less as
+    // per Sendgrid API, you can send to a maximum of 1000
+    // recipients for each API call
+    if(recipients.length <= 1000) {
+      data.recipients = recipients;
+      const msg = new Message(data);
+      sendEmails(msg.toJSON());
+    } else {
+      for (let i =0; i < recipients.length; i+= 1000){
+        let chunkedRecipients = recipients.slice(i, i+1000);
+        data.recipients = chunkedRecipients;
+        const msg = new Message(data);
+        console.log('sending to -> ' ,msg.toJSON())
+        sendEmails(msg.toJSON());
+      }
+    } 
   } 
 }
 
