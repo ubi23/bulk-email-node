@@ -4,11 +4,15 @@
 //const { send } = require('@sendgrid/mail');
 const sgMail = require('@sendgrid/mail');
 const Message = require('./helpers/classes/message');
+require('dotenv').config()
 
 // set the API Key from environment variables
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 // set the wrappers for substitution 
 sgMail.setSubstitutionWrappers('--', '--'); // may have to change if dynamic template is provided
+
+// maximum number of recipients for each Sendgrid API call
+const SENDGRID_MAX_RECIPIENTS = Number(process.env.SENDGRID_MAX_RECIPIENTS);
 
 /**
  * Send emails through the SendGrid API
@@ -28,42 +32,23 @@ module.exports.sendBulkEmails = (data, recipients) => {
       data.from = { email: dealerEmail, name: dealerData.dealerName};
       let dealerRecipients = dealerData.recipients;
 
-      if (dealerRecipients.length <= 1000){
-        data.recipients = dealerRecipients;
-        const msg = new Message(data);
-        sendEmails(msg.toJSON());
+      if (dealerRecipients.length <= SENDGRID_MAX_RECIPIENTS){
+        send(dealerRecipients, data);
       } else {
+        sendInChunks(dealerRecipients, data);        
+      }  
 
-        for (let i = 0; i < dealerRecipients.length; i += 1000){
-          let chunkedRecipients = dealerRecipients.slice(i, i+1000);
-          data.recipients = chunkedRecipients;
-          const msg = new Message(data);
-          console.log('sending to -> ' ,msg.toJSON())
-          sendEmails(msg.toJSON());
-        }
-      }
-      
     });
-
   } else {
-
     // same sender for all emails
 
     // checking if recipients are 1000 or less as
     // per Sendgrid API, you can send to a maximum of 1000
     // recipients for each API call
-    if(recipients.length <= 1000) {
-      data.recipients = recipients;
-      const msg = new Message(data);
-      sendEmails(msg.toJSON());
+    if (recipients.length <= SENDGRID_MAX_RECIPIENTS) {
+      send(recipients, data);
     } else {
-      for (let i =0; i < recipients.length; i+= 1000){
-        let chunkedRecipients = recipients.slice(i, i+1000);
-        data.recipients = chunkedRecipients;
-        const msg = new Message(data);
-        console.log('sending to -> ' ,msg.toJSON())
-        sendEmails(msg.toJSON());
-      }
+      sendInChunks(recipients, data);
     } 
   } 
 }
@@ -93,4 +78,23 @@ function sendEmails(msg){
       console.error(body);
     }
   });
+}
+
+/**
+ * Send emails in chunks, 1000 recipients per each Sendgrid API call
+ */
+function sendInChunks(recipients, data){
+  for (let i = 0; i < recipients.length; i+= SENDGRID_MAX_RECIPIENTS){
+    let chunkedRecipients = recipients.slice(i, i+ SENDGRID_MAX_RECIPIENTS);
+    send(chunkedRecipients, data);
+  }
+}
+
+/**
+ * This sends emails given an array of recipients and a data object
+ */
+function send(recipients, data){
+  data.recipients = recipients;
+  const msg = new Message(data);
+  sendEmails(msg.toJSON());
 }
