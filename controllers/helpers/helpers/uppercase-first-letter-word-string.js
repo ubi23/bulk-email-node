@@ -12,10 +12,13 @@ module.exports = function uppercaseWordsString(str){
     // split string into words
     const words = str.trim().split(' ');
 
+    // remove extra spaces between words
+    const wordsWithoutSpaces = words.filter((word, index) =>  word !== '');
+
     // make first letter uppercase, rest lowercase
-    for(let i = 0; i<words.length; i++){
-        words[i] = words[i][0].toUpperCase() + words[i].substr(1).toLowerCase();
+    for(let i = 0; i < wordsWithoutSpaces.length; i++){
+        wordsWithoutSpaces[i] = wordsWithoutSpaces[i][0].toUpperCase() + wordsWithoutSpaces[i].substr(1).toLowerCase();
     }
     
-    return words.join(' ');
+    return wordsWithoutSpaces.join(' ');
 }
