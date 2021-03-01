@@ -23,5 +23,5 @@ module.exports =  async function(req, res) {
     })
     .on("error", error => reject(error));  
   })
-  .catch(err => console.log('parsing eeeerrror -> ', err)); // here cannot open path file as file not provided, return this as error and stop execution
+  .catch(err => console.error('parsing eeeerrror -> ', err)); // here cannot open path file as file not provided, return this as error and stop execution
 }

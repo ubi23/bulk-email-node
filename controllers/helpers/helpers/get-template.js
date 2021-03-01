@@ -27,7 +27,7 @@ async function getTemplate(templateID){
         resolve(response.statusCode === 200 && isTemplateActive === 1); 
       })
       .catch(err => {
-        console.log('error occured here -> ', err);
+        console.error('error occured here -> ', err);
         reject(false);
       });   
   });

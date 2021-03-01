@@ -100,7 +100,7 @@ module.exports = (req) => {
     return validationStatus;
 
   } catch (err) {
-    console.log("error from try and catch during form validation", err);
+    console.error("error from try and catch during form validation", err);
   }
 }
 
