@@ -11,8 +11,10 @@ class Person {
   /**
    * Constructor 
    */
-  constructor(firstName, lastName, email, subOne, subTwo){
-    
+  constructor(person){
+
+    const {firstName, lastName, email, subOne, subTwo} = person;
+
     this.setFirstName(firstName);
     this.setLastName(lastName);
     this.setName();
@@ -101,6 +103,4 @@ class Person {
 }
 
 // Export class 
-module.exports = {
-  Person: Person
-};
+module.exports = Person;

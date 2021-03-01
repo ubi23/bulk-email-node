@@ -1,7 +1,6 @@
 /**
  * Dependencies
  */
-//const { send } = require('@sendgrid/mail');
 const sgMail = require('@sendgrid/mail');
 const Message = require('./helpers/classes/message');
 require('dotenv').config()
