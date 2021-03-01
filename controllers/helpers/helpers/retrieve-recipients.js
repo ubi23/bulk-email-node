@@ -2,7 +2,7 @@
  * Dependencies
  */
 const Person = require('../classes/person');
-const toCamelCase = require('./to-camel-case');
+const {toCamelCase} = require('./str-change-case');
 
 /**
  * 
