@@ -40,8 +40,8 @@ module.exports = async function(req, res) {
   try {
     // Retrieve rows from CSV file -> [row1, ..., rowN]
     const csvRows = await parseCSV(req, res); 
-
-    // Retrieve recipients from the csv rows [Person1, Person2, ..., PersonN ] or Dealers Map if separate senders 
+  
+    // Retrieve recipients from the csv rows, returns [Person1, Person2, ..., PersonN ] or Dealers Map if separate senders 
     const recipients = retrieveRecipients(csvRows, data.isSeparateSenders); 
 
     // Send emails
@@ -49,8 +49,8 @@ module.exports = async function(req, res) {
     
     return res.render('index', {success: 'Emails sent successfully!', }); 
   } catch(error) {
-    console.error(error);
 
+    console.error(error);
     return res.render('index', {success: 'An error occurred while processing the data!', }); // may want to change the key to a proper name rather than success
   }
 }
