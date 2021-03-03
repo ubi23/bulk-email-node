@@ -18,7 +18,7 @@ class Message {
     this.isDynamic = false;
     this.personalizations = [];
     this.html = 'Make sure this is never empty, otherwise you will get an error';
-    this.replyTo = { email: 'business@equalsmoney.com', name: 'Equals Money'}; // this is hard coded, may retrieve these values from env?
+    this.replyTo = { email: 'help@fairfx.com', name: 'FairFX'}; // this is hard coded, may retrieve these values from env?
 
 
     if (data) {

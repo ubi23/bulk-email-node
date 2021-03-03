@@ -45,7 +45,7 @@ module.exports = async function(req, res) {
 
     // Retrieve recipients from the csv rows [Person1, Person2, ..., PersonN ] or Dealers Map if separate senders 
     const recipients = retrieveRecipients(csvRows, data.isSeparateSenders); 
-
+    console.log('length of recipients = ', recipients.length);
     // Send emails
     sendgridController.sendBulkEmails(data, recipients); 
     
@@ -140,9 +140,11 @@ function createRecipientPerson(unsubPerson) {
   let firstName = unsubPerson.firstName;
   let lastName = unsubPerson.lastName;
   let email = unsubPerson.email;
-  let subOne = unsubPerson.subOne;
-  let subTwo = unsubPerson.subTwo;
-  let person = new Person(firstName, lastName, email, subOne, subTwo);
-
+  //let subOne = unsubPerson.subOne;
+  //let subTwo = unsubPerson.subTwo;
+  let person = new Person(firstName, lastName, email);
+  if (!person.hasOwnProperty('email')){
+    console.log('this person does not have email property', person);
+  }
   return person;
 }

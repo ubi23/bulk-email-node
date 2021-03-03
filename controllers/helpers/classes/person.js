@@ -15,8 +15,8 @@ class Person {
     
     this.setFirstName(firstName);
     this.setLastName(lastName);
-    this.setName();
-    this.setSubs(subOne, subTwo);
+    //this.setName();
+    //this.setSubs(subOne, subTwo);
     
     // validate email format
     if(this.isValidEmail(email)){
@@ -37,7 +37,7 @@ class Person {
     if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))
       return (true);
 
-    return false;
+      throw new Error('email not set up correctly');
   }
 
   /**
@@ -104,3 +104,5 @@ class Person {
 module.exports = {
   Person: Person
 };
+
+
