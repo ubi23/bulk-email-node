@@ -1,41 +1,11 @@
 {
-  "executionRoleArn": "arn:aws:iam::$ACCOUNTID_<ENV>:role/ECSTaskDefinition",
+  "executionRoleArn": "arn:aws:iam::$ACCOUNTID:role/$SERVICE-ECSTaskDefinition",
   "containerDefinitions": [
     {
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/multicurrency-web-$ENVIRONMENT_<ENV>",
-          "awslogs-region": "eu-west-2",
-          "awslogs-stream-prefix": "ecs"
-        }
-      },
-      "healthCheck": {
-        "retries": 3,
-        "command": [
-          "CMD-SHELL",
-          "wget --spider --quiet --tries=1 http://127.0.0.1/healthcheck || exit 1"
-        ],
-        "timeout": 10,
-        "interval": 30,
-        "startPeriod": 10
-      },
-      "portMappings": [
-        {
-          "protocol": "tcp",
-          "containerPort": 80
-        }
-      ],
-      "memoryReservation": 256,
-      "image": "<IMAGE1_NAME>",
-      "essential": true,
-      "name": "nginx"
-    },
-    {
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-group": "/ecs/multicurrency-web-$ENVIRONMENT_<ENV>",
+          "awslogs-group": "/ecs/$SERVICENAME",
           "awslogs-region": "eu-west-2",
           "awslogs-stream-prefix": "ecs"
         }
@@ -51,18 +21,17 @@
         "startPeriod": 10
       },
       "environment": [
-        { "name": "ENV", "value": "$ENVIRONMENT_<ENV>" },
-        { "name": "NODE_ENV", "value": "$NODE_ENV_<ENV>" }
+        { "name": "NODE_ENV", "value": "$NODE_ENV" }
       ],
       "memoryReservation": 1024,
-      "image": "<IMAGE2_NAME>",
+      "image": "<IMAGE1_NAME>",
       "essential": true,
       "name": "node"
     }
   ],
   "memory": "2048",
-  "taskRoleArn": "arn:aws:iam::$ACCOUNTID_<ENV>:role/ECSTaskDefinition",
-  "family": "multicurrency-web-$ENVIRONMENT_<ENV>",
+  "taskRoleArn": "arn:aws:iam::$ACCOUNTID:role/$SERVICE-ECSTaskDefinition",
+  "family": "$SERVICENAME",
   "requiresCompatibilities": ["FARGATE"],
   "networkMode": "awsvpc",
   "cpu": "512"

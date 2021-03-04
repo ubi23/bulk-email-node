@@ -26,7 +26,7 @@ resource "aws_service_discovery_service" "main" {
 resource "aws_ecs_service" "with_lb_deployment" {
   name                              = substr("${var.tags.Service}-service", 0, 255)
   cluster                           = var.ecs_cluster_id
-  task_definition                   = aws_ecs_task_definition.initial.arn
+  task_definition                   = aws_ecs_task_definition.task_definition_app.arn
   desired_count                     = var.ecs_parameters.desired_count
   health_check_grace_period_seconds = var.health_check_grace_period_seconds
   launch_type                       = "FARGATE"

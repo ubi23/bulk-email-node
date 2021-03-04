@@ -29,8 +29,9 @@ resource "aws_codebuild_project" "main" {
       value = var.container_name
     }
     environment_variable {
-      name  = "SECRET_NPM_TOKEN"
+      name  = "NPM_TOKEN"
       value = var.secret_npm_token
+      type  = "SECRETS_MANAGER"
     }
     environment_variable {
       name  = "APPLICATION_NAME"
@@ -41,7 +42,7 @@ resource "aws_codebuild_project" "main" {
       for_each = var.environmentdeploy.shared
 
       content {
-        name  = "${upper(environment_variable.key)}_DEVELOP"
+        name  = upper(environment_variable.key)
         value = environment_variable.value
       }
     }

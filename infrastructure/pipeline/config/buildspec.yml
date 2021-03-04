@@ -18,7 +18,9 @@ phases:
     commands:
       - echo "===========Running Build packages==========="
       # Build and tag the new docker image.
-      - docker build -t ${DOCKER_IMAGE} .
+      - docker build 
+        --build-arg NPM_TOKEN=${NPM_TOKEN}
+        -t ${DOCKER_IMAGE} .
       - docker tag ${DOCKER_IMAGE}:latest ${DOCKER_IMAGE}:$IMAGE_TAG
   post_build:
     commands:
@@ -29,11 +31,11 @@ phases:
       # Retrieving image scan findings
       - ./infrastructure/pipeline/config/scan-ecr-image.sh $REPOSITORY_NAME_APP $IMAGE_TAG
       # Writing image definitions file...
-      - printf '{"ImageURI":"%s"}' ${REPOSITORY_URI}/${APPLICATION_NAME}:$DOCKER_TAG > ./imageDetail.json
+      - printf '{"ImageURI":"%s"}' ${REPOSITORY_URI}/${APPLICATION_NAME}:$IMAGE_TAG > ./imageDetail.json
       # We substitute every environment variable in the appspec_template.yaml with envsubst
       - envsubst < infrastructure/pipeline/config/appspec-template.yaml > appspec.yaml
       # Creating task definition file
-      - ./infrastructure/pipeline/config/create-task-defintion.sh shared
+      - envsubst < infrastructure/pipeline/config/task-definition.json.tmpl > task-definition.json
 
 artifacts:
   secondary-artifacts:
@@ -43,7 +45,7 @@ artifacts:
     configfiles:
       files:
         - appspec.yaml
-        - task-definition-develop.json
+        - task-definition.json
 
 cache:
   paths:

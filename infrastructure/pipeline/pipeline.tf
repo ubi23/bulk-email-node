@@ -1,7 +1,7 @@
 module "codebuild" {
   source            = "./modules/codebuild/"
   account_name      = local.account_name
-  secret_npm_token  = data.aws_secretsmanager_secret.npm_token.arn
+  secret_npm_token  = "/common/npm-token"
   aws_account_id    = local.aws_account_id
   deployer_role     = local.deployer_role
   environment       = local.environment
