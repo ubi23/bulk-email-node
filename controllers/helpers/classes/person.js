@@ -51,8 +51,9 @@ class Person {
    */
   setDealerDetails(dealerName, dealerEmail){
 
-    // Expecting a not empty string, if one's provided
-    if (typeof dealerName !== 'undefined' && dealerName.length > 0){
+    if (typeof dealerName !== 'string' || dealerName.length < 1){
+      this.dealerName = '';
+    } else {
       this.dealerName = uppercaseWordsString(dealerName);
     }
 
