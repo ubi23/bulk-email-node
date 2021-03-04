@@ -18,7 +18,9 @@ locals {
     shared = {
       ServiceName = "bulk-email-shared"
       Service     = "bulk-email"
+      AccountId   = module.aws_accounts.meta.accounts.shared-shared.id
       Environment = module.aws_accounts.meta.accounts.shared-shared.org_name
+      port        = "3000"
       node_env    = "production"
     }
   }

@@ -10,6 +10,13 @@
           "awslogs-stream-prefix": "ecs"
         }
       },
+      "portMappings": [
+        {
+          "containerPort": $PORT,
+          "protocol": "tcp",
+          "hostPort": $PORT
+        }
+      ],
       "healthCheck": {
         "retries": 3,
         "command": [

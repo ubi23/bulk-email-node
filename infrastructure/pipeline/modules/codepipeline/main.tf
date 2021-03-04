@@ -66,12 +66,10 @@ resource "aws_codepipeline" "main" {
         DeploymentGroupName            = var.environmentdeploy.shared.ServiceName
         TaskDefinitionTemplateArtifact = "configfiles"
         AppSpecTemplateArtifact        = "configfiles"
-        TaskDefinitionTemplatePath     = "task-definition-develop.json"
+        TaskDefinitionTemplatePath     = "task-definition.json"
         AppSpecTemplatePath            = "appspec.yaml"
-        Image1ArtifactName             = "nginx"
+        Image1ArtifactName             = "node"
         Image1ContainerName            = "IMAGE1_NAME"
-        Image2ArtifactName             = "node"
-        Image2ContainerName            = "IMAGE2_NAME"
       }
       run_order = 4
     }
