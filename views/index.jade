@@ -20,6 +20,8 @@ block content
     div
       input(name="fromName", type="text", placeholder="From name", value=(undefined===formData ? '' : formData.fromName)) 
     div
+      input(name="replyTo", type="email", placeholder="Reply to", value=(undefined===formData ? '' : formData.replyTo)) 
+    div
       input(name="templateID", type="text", placeholder="Template ID", value=(undefined===formData ? '' : formData.templateID))
     div
       input(name="subject", type="text", placeholder="subject", value=(undefined===formData ? '' : formData.subject))
