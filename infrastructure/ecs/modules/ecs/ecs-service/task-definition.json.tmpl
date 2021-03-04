@@ -1,0 +1,14 @@
+[
+    {
+        "name": "${name}",
+        "image": "nginx:alpine",
+        "memoryReservation": 512,
+        "essential": true,
+        "portMappings": [
+            {
+                "containerPort": ${port},
+                "protocol": "tcp"
+            }
+        ]
+    }
+]

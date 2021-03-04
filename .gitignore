@@ -261,3 +261,13 @@ dist
 ._.DS_Store
 **/.DS_Store
 **/._.DS_Store
+
+#  Local .terraform directories
+**/.terraform/*
+
+# .tfstate files
+*.tfstate
+*.tfstate.*
+
+# Local plan files
+plan.lock
