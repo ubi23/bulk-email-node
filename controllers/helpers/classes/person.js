@@ -37,7 +37,7 @@ class Person {
     if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))
       return (true);
 
-      throw new Error('email not set up correctly');
+    throw new Error('email not set up correctly');
   }
 
   /**
