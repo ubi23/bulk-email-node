@@ -11,17 +11,21 @@ class Person {
   /**
    * Constructor 
    */
-  constructor(person){
+  constructor(person, isSeparateSenders){
 
-    const {firstName, lastName, email, subOne, subTwo} = person;
+    const {firstName, lastName, email, subOne, subTwo, dealerName, dealerEmail} = person;
 
     this.setFirstName(firstName);
     this.setLastName(lastName);
     this.setName();
     this.setSubs(subOne, subTwo);
+
+    if (true === isSeparateSenders){
+      this.setDealerDetails(dealerName, dealerEmail);
+    }
     
     // validate email format
-    if(this.isValidEmail(email)){
+    if (this.isValidEmail(email)){
       this.email = email;
     }    
   }
@@ -40,6 +44,21 @@ class Person {
       return (true);
 
     throw new Error('Email not set correctly, the email provided is ' + email);
+  }
+
+  /**
+   * 
+   */
+  setDealerDetails(dealerName, dealerEmail){
+
+    // Expecting a not empty string, if one's provided
+    if (typeof dealerName !== 'undefined' && dealerName.length > 0){
+      this.dealerName = uppercaseWordsString(dealerName);
+    }
+
+    if (this.isValidEmail(dealerEmail)){
+      this.dealerEmail = dealerEmail;
+    }
   }
 
   /**
