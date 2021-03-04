@@ -7,8 +7,8 @@ const {toCamelCase} = require('./str-change-case');
 /**
  * 
  */
-function createRecipientPerson(unsubPerson) {
-  return new Person(unsubPerson);
+function createRecipientPerson(unsubPerson, isSeparateSenders) {
+  return new Person(unsubPerson, isSeparateSenders);
 }
 
 /**
@@ -34,7 +34,7 @@ function retrieveRecipients(csvRows, isSeparateSenders){
       // keys in the JS code
       unsubPerson = toCamelCase(unsubPerson, []);
       
-      recipients.push(createRecipientPerson(unsubPerson))
+      recipients.push(createRecipientPerson(unsubPerson, isSeparateSenders))
     });
 
     return recipients;
@@ -47,7 +47,7 @@ function retrieveRecipients(csvRows, isSeparateSenders){
   
     unsubPerson = toCamelCase(unsubPerson, []);
 
-    let recipient  = createRecipientPerson(unsubPerson);
+    let recipient  = createRecipientPerson(unsubPerson, isSeparateSenders);
     let dealerEmail = unsubPerson.dealerEmail;
 
     if (typeof dealerEmail !== 'string'){
