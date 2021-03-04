@@ -1,4 +1,4 @@
-FROM node:14.5.5-alpine
+FROM node:14.15.5-alpine
 # Expect build args
 ARG NPM_TOKEN
 

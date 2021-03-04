@@ -1,17 +1,7 @@
 version: 0.2
 env:
   shell: bash
-  secrets-manager:
-    NPM_TOKEN: ${SECRET_NPM_TOKEN}
 phases:
-  install:
-    runtime-versions:
-      nodejs: 10.x
-    commands:
-      # Install packages
-      - apt-get install -y jq
-      # Configure NPM
-      - echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
   pre_build:
     commands:
       - echo "===========Running pre build==========="
@@ -19,53 +9,41 @@ phases:
       - eval $(aws ecr get-login --no-include-email --region eu-west-2)
       # getting image tag
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - DOCKER_TAG=${COMMIT_HASH:=latest}
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
       # Repo URI
       - REPOSITORY_URI=${AWS_ACCOUNT_ID}.dkr.ecr.eu-west-2.amazonaws.com/fairfxgroup/${APPLICATION_NAME}
       - DOCKER_IMAGE=${REPOSITORY_URI}/${APPLICATION_NAME}
       - REPOSITORY_NAME_APP=fairfxgroup/${APPLICATION_NAME}/${APPLICATION_NAME}
-      - REPOSITORY_NAME_NGINX=fairfxgroup/${APPLICATION_NAME}/${APPLICATION_NAME}-nginx
   build:
     commands:
       - echo "===========Running Build packages==========="
-      # Build and Test Docker Images
-      - set -eo pipefail
-      - docker-compose build
+      # Build and tag the new docker image.
+      - docker build -t ${DOCKER_IMAGE} .
+      - docker tag ${DOCKER_IMAGE}:latest ${DOCKER_IMAGE}:$IMAGE_TAG
   post_build:
     commands:
       - echo "===========Running Post Build packages==========="
       # Push docker images to ECR
-      - docker-compose push
+      - docker push ${DOCKER_IMAGE}:$IMAGE_TAG
+      - docker push ${DOCKER_IMAGE}:latest
       # Retrieving image scan findings
-      - ./infrastructure/pipeline/config/scan-ecr-image.sh $REPOSITORY_NAME_APP $DOCKER_TAG
-      - ./infrastructure/pipeline/config/scan-ecr-image.sh $REPOSITORY_NAME_NGINX $DOCKER_TAG
+      - ./infrastructure/pipeline/config/scan-ecr-image.sh $REPOSITORY_NAME_APP $IMAGE_TAG
       # Writing image definitions file...
-      - mkdir -p nginxImage nodeImage
-      - printf '{"ImageURI":"%s"}' ${REPOSITORY_URI}/${APPLICATION_NAME}-nginx:$DOCKER_TAG > ./nginxImage/imageDetail.json
-      - printf '{"ImageURI":"%s"}' ${REPOSITORY_URI}/${APPLICATION_NAME}:$DOCKER_TAG > ./nodeImage/imageDetail.json
+      - printf '{"ImageURI":"%s"}' ${REPOSITORY_URI}/${APPLICATION_NAME}:$DOCKER_TAG > ./imageDetail.json
       # We substitute every environment variable in the appspec_template.yaml with envsubst
       - envsubst < infrastructure/pipeline/config/appspec-template.yaml > appspec.yaml
-      # Creating task definition file for each environment
-      - ./infrastructure/pipeline/config/create-task-defintion.sh develop
-      - ./infrastructure/pipeline/config/create-task-defintion.sh staging
-      - ./infrastructure/pipeline/config/create-task-defintion.sh production
+      # Creating task definition file
+      - ./infrastructure/pipeline/config/create-task-defintion.sh shared
 
 artifacts:
   secondary-artifacts:
-    nginx:
-      base-directory: ./nginxImage
-      files:
-        - imageDetail.json
     node:
-      base-directory: ./nodeImage
       files:
         - imageDetail.json
     configfiles:
       files:
         - appspec.yaml
         - task-definition-develop.json
-        - task-definition-staging.json
-        - task-definition-production.json
 
 cache:
   paths:
