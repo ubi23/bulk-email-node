@@ -17,16 +17,6 @@
           "hostPort": $PORT
         }
       ],
-      "healthCheck": {
-        "retries": 3,
-        "command": [
-          "CMD-SHELL",
-          "wget --spider --quiet --tries=1 http://127.0.0.1:3000/ping || exit 1"
-        ],
-        "timeout": 10,
-        "interval": 30,
-        "startPeriod": 10
-      },
       "environment": [
         { "name": "NODE_ENV", "value": "$NODE_ENV" },
         { "name": "SENDGRID_MAX_RECIPIENTS", "value": "$SENDGRID_MAX_RECIPIENTS" }

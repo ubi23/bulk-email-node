@@ -20,7 +20,8 @@ locals {
       Service                 = "bulk-email"
       AccountId               = module.aws_accounts.meta.accounts.shared-shared.id
       Environment             = module.aws_accounts.meta.accounts.shared-shared.org_name
-      port                    = "3000"
+      platform_version        = "1.4.0"
+      port                    = "80"
       node_env                = "production"
       sendgrid_max_recipients = "1000"
     }
