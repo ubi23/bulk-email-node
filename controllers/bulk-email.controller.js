@@ -46,7 +46,7 @@ module.exports = async function(req, res) {
     const recipients = retrieveRecipients(csvRows, data.isSeparateSenders); 
 
     // Send emails
-    sendgridController.sendBulkEmails(data, recipients); 
+    await sendgridController.sendBulkEmails(data, recipients); 
     
     return res.render('index', {success: 'Emails sent successfully!', }); 
   } catch(error) {
