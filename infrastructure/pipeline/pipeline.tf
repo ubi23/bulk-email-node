@@ -1,13 +1,14 @@
 module "codebuild" {
-  source            = "./modules/codebuild/"
-  account_name      = local.account_name
-  secret_npm_token  = "/common/npm-token"
-  aws_account_id    = local.aws_account_id
-  deployer_role     = local.deployer_role
-  environment       = local.environment
-  environmentdeploy = local.environmentdeploy
-  container_name    = "node"
-  application_name  = "bulk-email"
+  source                  = "./modules/codebuild/"
+  account_name            = local.account_name
+  secret_npm_token        = "/common/npm-token"
+  secret_sendgrid_api_arn = data.aws_secretsmanager_secret.sendgrid_api_key.arn
+  aws_account_id          = local.aws_account_id
+  deployer_role           = local.deployer_role
+  environment             = local.environment
+  environmentdeploy       = local.environmentdeploy
+  container_name          = "node"
+  application_name        = "bulk-email"
 
   vpc_id     = data.aws_vpc.main.id
   subnet_ids = [for s in data.aws_subnet.private : s.id]

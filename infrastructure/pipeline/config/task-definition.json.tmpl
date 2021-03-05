@@ -28,7 +28,11 @@
         "startPeriod": 10
       },
       "environment": [
-        { "name": "NODE_ENV", "value": "$NODE_ENV" }
+        { "name": "NODE_ENV", "value": "$NODE_ENV" },
+        { "name": "SENDGRID_MAX_RECIPIENTS", "value": "$SENDGRID_MAX_RECIPIENTS" }
+      ],
+      "secrets": [
+        {  "valueFrom": "${SENDGRID_API_KEY}:sendgrid_api_key::", "name": "SENDGRID_API_KEY" }
       ],
       "memoryReservation": 1024,
       "image": "<IMAGE1_NAME>",

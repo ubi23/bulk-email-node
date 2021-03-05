@@ -16,12 +16,13 @@ locals {
 
   environmentdeploy = {
     shared = {
-      ServiceName = "bulk-email-shared"
-      Service     = "bulk-email"
-      AccountId   = module.aws_accounts.meta.accounts.shared-shared.id
-      Environment = module.aws_accounts.meta.accounts.shared-shared.org_name
-      port        = "3000"
-      node_env    = "production"
+      ServiceName             = "bulk-email-shared"
+      Service                 = "bulk-email"
+      AccountId               = module.aws_accounts.meta.accounts.shared-shared.id
+      Environment             = module.aws_accounts.meta.accounts.shared-shared.org_name
+      port                    = "3000"
+      node_env                = "production"
+      sendgrid_max_recipients = "1000"
     }
   }
 }

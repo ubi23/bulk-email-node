@@ -37,6 +37,10 @@ resource "aws_codebuild_project" "main" {
       name  = "APPLICATION_NAME"
       value = var.application_name
     }
+    environment_variable {
+      name  = "SENDGRID_API_KEY"
+      value = var.secret_sendgrid_api_arn
+    }
 
     dynamic "environment_variable" {
       for_each = var.environmentdeploy.shared

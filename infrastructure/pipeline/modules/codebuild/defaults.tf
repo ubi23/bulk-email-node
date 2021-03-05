@@ -17,6 +17,10 @@ variable "secret_npm_token" {
   type = string
 }
 
+variable "secret_sendgrid_api_arn" {
+  type = string
+}
+
 variable "aws_account_id" {
   type = string
 }
