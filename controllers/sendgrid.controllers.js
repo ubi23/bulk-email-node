@@ -26,7 +26,7 @@ module.exports.sendBulkEmails = async (data, recipients) => {
   // check if different senders
   if (data.isSeparateSenders === true){
     
-    promises = recipients.map((dealerData, dealerEmail) => {
+    let promises = recipients.map((dealerData, dealerEmail) => {
       // Change the from value to be the dealer's name and email rather than what was provided in the form
       data.from = { email: dealerEmail, name: dealerData.dealerName};
       let dealerRecipients = dealerData.recipients;
