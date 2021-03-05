@@ -10,7 +10,7 @@ RUN echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/.npmrc
 COPY . .
 
 # Install app dependencies and prune
-RUN npm install && rm -f ~/.npmrc
+RUN npm install --production && rm -f ~/.npmrc
 RUN npm prune --production
 
 EXPOSE 3000
