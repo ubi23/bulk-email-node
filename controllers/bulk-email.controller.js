@@ -44,10 +44,10 @@ module.exports = async function(req, res) {
   
     // Retrieve recipients from the csv rows, returns [Person1, Person2, ..., PersonN ] or Dealers Map if separate senders 
     const recipients = retrieveRecipients(csvRows, data.isSeparateSenders); 
-
-    // Send emails
-    sendgridController.sendBulkEmails(data, recipients); 
     
+    // Send emails
+    await sendgridController.sendBulkEmails(data, recipients); 
+
     return res.render('index', {success: 'Emails sent successfully!', }); 
   } catch(error) {
 

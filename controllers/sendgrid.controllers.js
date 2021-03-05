@@ -16,7 +16,7 @@ const SENDGRID_MAX_RECIPIENTS = Number(process.env.SENDGRID_MAX_RECIPIENTS);
 /**
  * Send emails through the SendGrid API
  */
-module.exports.sendBulkEmails = (data, recipients) => {
+module.exports.sendBulkEmails = async (data, recipients) => {
   
   // Expecting either an array or a Map as recipients
   if (!Array.isArray(recipients) && (recipients instanceof Map !== true) || recipients === null ){
@@ -26,18 +26,18 @@ module.exports.sendBulkEmails = (data, recipients) => {
   // check if different senders
   if (data.isSeparateSenders === true){
     
-    recipients.forEach((dealerData, dealerEmail) => {
+    promises = recipients.map((dealerData, dealerEmail) => {
       // Change the from value to be the dealer's name and email rather than what was provided in the form
       data.from = { email: dealerEmail, name: dealerData.dealerName};
       let dealerRecipients = dealerData.recipients;
 
       if (dealerRecipients.length <= SENDGRID_MAX_RECIPIENTS){
-        send(dealerRecipients, data);
+        return send(dealerRecipients, data);
       } else {
-        sendInChunks(dealerRecipients, data);        
+        return sendInChunks(dealerRecipients, data);        
       }  
-
     });
+    return Promise.all(promises);
   } else {
     // same sender for all emails
 
@@ -45,9 +45,9 @@ module.exports.sendBulkEmails = (data, recipients) => {
     // per Sendgrid API, you can send to a maximum of 1000
     // recipients for each API call
     if (recipients.length <= SENDGRID_MAX_RECIPIENTS) {
-      send(recipients, data);
+      return send(recipients, data);
     } else {
-      sendInChunks(recipients, data);
+      return sendInChunks(recipients, data);
     } 
   } 
 }
@@ -55,9 +55,9 @@ module.exports.sendBulkEmails = (data, recipients) => {
 /**
  * 
  */
-function sendEmails(msg){
+async function sendEmails(msg){
   // send emails
-  sgMail
+  return sgMail
   .sendMultiple(msg) 
   .then(() => {
     // emails sent without any error
@@ -82,18 +82,21 @@ function sendEmails(msg){
 /**
  * Send emails in chunks, 1000 recipients per each Sendgrid API call
  */
-function sendInChunks(recipients, data){
+async function sendInChunks(recipients, data){
+  let promises = [];
   for (let i = 0; i < recipients.length; i+= SENDGRID_MAX_RECIPIENTS){
     let chunkedRecipients = recipients.slice(i, i+ SENDGRID_MAX_RECIPIENTS);
-    send(chunkedRecipients, data);
+    const promise = send(chunkedRecipients, data);
+    promises.push(promise);
   }
+  return Promise.all(promises);
 }
 
 /**
  * This sends emails given an array of recipients and a data object
  */
-function send(recipients, data){
+async function send(recipients, data){
   data.recipients = recipients;
   const msg = new Message(data);
-  sendEmails(msg.toJSON());
+  return sendEmails(msg.toJSON());
 }
