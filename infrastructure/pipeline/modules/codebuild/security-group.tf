@@ -1,5 +1,5 @@
 resource "aws_security_group" "main" {
-  name        = replace(substr(var.tags.Name, 0, 255), "/-$/", "")
+  name        = replace(substr(join("-", [var.tags.ServiceName, "pipeline"]), 0, 255), "/-$/", "")
   description = "Traffic for CodeBuild"
   vpc_id      = var.vpc_id
 
@@ -18,6 +18,6 @@ resource "aws_security_group" "main" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = var.tags
+  tags   = merge(var.tags, { "Name" : replace(substr(join("-", [var.tags.ServiceName, "pipeline"]), 0, 255), "/-$/", "") })
 }
 

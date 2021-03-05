@@ -52,7 +52,7 @@ resource "aws_ecs_service" "with_lb_deployment" {
   load_balancer {
     target_group_arn = var.aws_lb_target_group_arn
     container_name   = local.container_name
-    container_port   = var.container_port
+    container_port   = var.ecs_parameters.container_port
   }
 
   dynamic "service_registries" {

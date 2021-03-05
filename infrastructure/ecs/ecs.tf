@@ -7,12 +7,14 @@ module "ecs_cluster" {
 module "ecs_security_group" {
   source                   = "./modules/ecs/ecs-security-group"
   source_security_group_id = module.ecs_loadbalancer.security_group_id
+  port                     = 3000
   tags                     = local.tags
 }
 
 module "ecs_loadbalancer" {
   source                         = "./modules/ecs/ecs-alb"
   listener_rule_condition_values = aws_route53_record.api_endpoint.name
+  target_group_port              = 3000
   health_check_path              = "/ping"
   tags                           = local.tags
 }

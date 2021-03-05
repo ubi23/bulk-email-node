@@ -31,6 +31,7 @@ variable "ecs_parameters" {
       autoscaling_memory_threshold = "85"
       desired_count                = "1"
       action_on_timeout            = "CONTINUE_DEPLOYMENT"
+      container_port               = "3000"
       domain                       = "equals.io"
       service_discovery_domain     = "shared."
     }

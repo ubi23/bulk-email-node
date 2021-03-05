@@ -21,7 +21,7 @@ locals {
       AccountId               = module.aws_accounts.meta.accounts.shared-shared.id
       Environment             = module.aws_accounts.meta.accounts.shared-shared.org_name
       platform_version        = "1.4.0"
-      port                    = "80"
+      port                    = "3000"
       node_env                = "production"
       sendgrid_max_recipients = "1000"
     }

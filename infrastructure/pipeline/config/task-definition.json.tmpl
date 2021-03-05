@@ -19,11 +19,22 @@
       ],
       "environment": [
         { "name": "NODE_ENV", "value": "$NODE_ENV" },
-        { "name": "SENDGRID_MAX_RECIPIENTS", "value": "$SENDGRID_MAX_RECIPIENTS" }
+        { "name": "SENDGRID_MAX_RECIPIENTS", "value": "$SENDGRID_MAX_RECIPIENTS" },
+        { "name": "ENV", "value": "shared" }
       ],
       "secrets": [
         {  "valueFrom": "${SENDGRID_API_KEY}:sendgrid_api_key::", "name": "SENDGRID_API_KEY" }
       ],
+      "healthCheck": {
+        "retries": 3,
+        "command": [
+          "CMD-SHELL",
+          "wget --spider --quiet --tries=1 http://127.0.0.1:3000 || exit 1"
+        ],
+        "timeout": 10,
+        "interval": 30,
+        "startPeriod": 10
+      },
       "memoryReservation": 1024,
       "image": "<IMAGE1_NAME>",
       "essential": true,

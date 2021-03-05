@@ -32,11 +32,6 @@ variable "health_check_grace_period_seconds" {
   default = 30
 }
 
-variable "container_port" {
-  type    = number
-  default = 80
-}
-
 variable "container_protocol" {
   type    = string
   default = "HTTP"

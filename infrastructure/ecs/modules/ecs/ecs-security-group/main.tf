@@ -1,7 +1,7 @@
 resource "aws_security_group" "ecs" {
   name   = replace(substr(join("-", [var.tags.ServiceName, "fargate"]), 0, 255), "/-$/", "")
   vpc_id = local.aws_vpc_id
-  tags   = merge(var.tags, { "ecs-security-group-name" : replace(substr(join("-", [var.tags.ServiceName, "fargate"]), 0, 255), "/-$/", "") })
+  tags   = merge(var.tags, { "Name" : replace(substr(join("-", [var.tags.ServiceName, "fargate"]), 0, 255), "/-$/", "") })
 }
 
 ## Inbound from loadbalancer

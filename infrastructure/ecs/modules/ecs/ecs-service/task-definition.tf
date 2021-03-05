@@ -2,7 +2,7 @@ data "template_file" "task_definition_app" {
   template = file("${path.module}/config/task-definition.json.tmpl")
   vars = {
     name = local.container_name
-    port = var.container_port
+    port = var.ecs_parameters.container_port
   }
 }
 
@@ -67,11 +67,10 @@ resource "aws_iam_policy" "ECSTaskDefinitionPolicy" {
         "cloudwatch:*"
       ],
       "Effect": "Allow",
-      "Resource": [ "*" ]
+      "Resource": "*"
     },
     {
       "Action": [
-        "ssm:GetParameters",
         "secretsmanager:GetSecretValue"
       ],
       "Effect": "Allow",
