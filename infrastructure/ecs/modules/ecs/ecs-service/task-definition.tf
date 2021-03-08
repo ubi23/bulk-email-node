@@ -71,10 +71,11 @@ resource "aws_iam_policy" "ECSTaskDefinitionPolicy" {
     },
     {
       "Action": [
-        "secretsmanager:GetSecretValue"
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:ListSecrets"
       ],
       "Effect": "Allow",
-      "Resource": [ "${aws_secretsmanager_secret.sendgrid_api_key.arn}" ]
+      "Resource": ["${aws_secretsmanager_secret.sendgrid_api_key.arn}"]
     }
   ]
 }

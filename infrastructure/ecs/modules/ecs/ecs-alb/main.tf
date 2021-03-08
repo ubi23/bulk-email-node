@@ -58,9 +58,27 @@ resource "aws_lb_listener_rule" "https" {
 
   condition {
     host_header {
-      values = [var.listener_rule_condition_values]
+      values = [ var.listener_rule_condition_values ]
     }
   }
+
+  condition {
+    path_pattern {
+      values = [ "/*" ]
+    }
+  }
+
+  # action {
+  #   type = "authenticate-oidc"
+  #   authenticate_oidc {
+  #     authorization_endpoint = "https://fairfx.onelogin.com/oidc/2/auth"
+  #     client_id              = "repalce_with_real_id"
+  #     client_secret          = "repalce_with_real_secret"
+  #     issuer                 = "https://fairfx.onelogin.com/oidc/2"
+  #     token_endpoint         = "https://fairfx.onelogin.com/oidc/2/token"
+  #     user_info_endpoint     = "https://fairfx.onelogin.com/oidc/2/me"
+  #   }
+  # }
 
   # Changing the priority causes forces new resource, then network outage may occur.
   # So, specify resources are created before destroyed.

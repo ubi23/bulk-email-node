@@ -19,7 +19,7 @@ module "codepipeline" {
   source              = "./modules/codepipeline/"
   repo                = element(split("/", module.common.tags.Project), 1)
   owner               = element(split("/", module.common.tags.Project), 0)
-  branch              = "feature/codepipeline" // this branh will trigger the  pipeline
+  branch              = "develop" // this branh will trigger the  pipeline
   aws_account_id      = local.aws_account_id
   deployer_role       = local.deployer_role
   environmentdeploy   = local.environmentdeploy
