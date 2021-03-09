@@ -1,0 +1,41 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to logs 
+
+  if data 
+    div
+      table 
+        thead 
+          tr: th(scope='col') ID
+              th(scope='col') From Email
+              th(scope='col') From Name
+              th(scope='col') Template ID 
+              th(scope='col') Subject 
+              th(scope='col') Filename 
+              th(scope='col') Status 
+              th(scope='col') Sent at
+        tbody
+          for log in data 
+            tr
+              td
+                | #{log.id}
+              td 
+                | #{log.fromEmail}
+              td 
+                | #{log.fromName}
+              td 
+                | #{log.templateId}
+              td 
+                | #{log.subject}
+              td 
+                | #{log.filename}
+              
+              if log.status == true   
+                td OK 
+              else  
+                td X
+              td 
+                | #{log.createdAt}
+
