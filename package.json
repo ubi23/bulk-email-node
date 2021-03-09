@@ -1,13 +1,14 @@
 {
   "private": true,
   "engines": {
-    "node": "14.5.5"
+    "node": "14.15.5"
   },
   "type": "commonjs",
   "version": "1.0.0",
   "scripts": {
     "start": "cross-env NODE_ENV=production node server.js",
-    "dev": "cross-env NODE_ENV=development nodemon server.js"
+    "dev": "cross-env NODE_ENV=development nodemon server.js",
+    "db:migrate": "npx sequelize db:migrate"
   },
   "dependencies": {
     "@sendgrid/client": "^7.4.2",
@@ -21,10 +22,13 @@
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "morgan": "~1.9.1",
-    "multer": "^1.4.2"
+    "multer": "^1.4.2",
+    "sequelize": "^6.5.0",
+    "sequelize-cli": "^6.2.0"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "sqlite3": "^5.0.2"
   }
 }
