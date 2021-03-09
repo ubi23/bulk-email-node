@@ -17,6 +17,11 @@ const validate = () => {
       .isEmail().withMessage('Please insert a valid email address.').bail()
       .normalizeEmail(), 
 
+    body('replyTo')
+      .exists().bail()
+      .isEmail().withMessage('Please insert a valid email address.').bail()
+      .normalizeEmail(), 
+
     body('saveFile')
       .exists(existsOptions).bail()
       .escape().trim().isBoolean().withMessage('Please specify this field.'),
