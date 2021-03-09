@@ -1,5 +1,6 @@
 locals {
   aws_vpc_id = var.aws_vpc_id == "" ? data.aws_vpc.main[0].id : var.aws_vpc_id
+  oidc_creds = jsondecode(data.aws_secretsmanager_secret_version.oidc.secret_string)
 }
 
 variable "aws_vpc_id" {

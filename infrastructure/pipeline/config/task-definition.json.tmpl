@@ -35,13 +35,13 @@
         "interval": 30,
         "startPeriod": 10
       },
-      "memoryReservation": 1024,
+      "memoryReservation": 512,
       "image": "<IMAGE1_NAME>",
       "essential": true,
       "name": "node"
     }
   ],
-  "memory": "2048",
+  "memory": "1024",
   "taskRoleArn": "arn:aws:iam::$ACCOUNTID:role/$SERVICE-ECSTaskDefinition",
   "family": "$SERVICENAME",
   "requiresCompatibilities": ["FARGATE"],

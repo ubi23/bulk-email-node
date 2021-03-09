@@ -3,6 +3,28 @@ variable "tags" {
   type        = map(string)
 }
 
+
+# Scale up at 7 am weekdays, this is UTC so it doesn't adjust to daylight savings
+variable "scale_up_cron" {
+  default = "cron(0 7 ? * MON-FRI *)"
+}
+
+# Default scale down at 10 pm every day
+variable "scale_down_cron" {
+  default = "cron(0 20 ? * * *)"
+}
+
+# The mimimum number of containers to scale down to.
+# Set this and `scale_down_max_capacity` to 0 to turn off service on the `scale_down_cron` schedule.
+variable "scale_down_min_capacity" {
+  default = 0
+}
+
+# The maximum number of containers to scale down to.
+variable "scale_down_max_capacity" {
+  default = 0
+}
+
 variable "aws_service_discovery_private_dns_namespace_id" {
   type = string
 }
@@ -60,28 +82,6 @@ variable "service_discovery_name" {
 variable "max_tasks_multiplier" {
   type    = number
   default = 4
-}
-
-# Default scale up at 8 am weekdays, this is UTC so it doesn't adjust to daylight savings
-# https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
-variable "scale_up_cron" {
-  default = "cron(0 8 ? * MON-FRI *)"
-}
-
-# Default scale down at 10 pm every day
-variable "scale_down_cron" {
-  default = "cron(0 22 ? * * *)"
-}
-
-# The mimimum number of containers to scale down to.
-# Set this and `scale_down_max_capacity` to 0 to turn off service on the `scale_down_cron` schedule.
-variable "scale_down_min_capacity" {
-  default = 0
-}
-
-# The maximum number of containers to scale down to.
-variable "scale_down_max_capacity" {
-  default = 0
 }
 
 variable "attach_service_discovery" {

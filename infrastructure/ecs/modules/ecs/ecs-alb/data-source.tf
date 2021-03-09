@@ -18,3 +18,11 @@ data "aws_vpc" "main" {
     Type        = "main"
   }
 }
+
+data "aws_secretsmanager_secret" "oidc" {
+  name = "/${var.tags.Service}/${var.tags.Environment}/AUTHENTICATE-OIDC"
+}
+
+data "aws_secretsmanager_secret_version" "oidc" {
+  secret_id = data.aws_secretsmanager_secret.oidc.id
+}

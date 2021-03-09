@@ -1,6 +1,6 @@
 module "ecs_cluster" {
   source            = "./modules/ecs/ecs-cluster"
-  containerInsights = "enabled"
+  containerInsights = "disabled"
   tags              = local.tags
 }
 
