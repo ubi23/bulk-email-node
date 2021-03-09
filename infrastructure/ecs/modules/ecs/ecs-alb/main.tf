@@ -47,9 +47,22 @@ resource "aws_lb_target_group" "main" {
 # Leaving it unset will automatically set the rule with next available priority after currently existing highest rule.
 # A listener can't have multiple rules with the same priority.
 
-resource "aws_lb_listener_rule" "https" {
+resource "aws_lb_listener_rule" "oidc" {
   listener_arn = data.aws_lb_listener.https.arn
   priority     = var.listener_rule_priority
+
+  action {
+    type = "authenticate-oidc"
+
+    authenticate_oidc {
+      authorization_endpoint = "https://fairfx.onelogin.com/oidc/2/auth"
+      client_id              = local.oidc_creds.client_id
+      client_secret          = local.oidc_creds.client_secret
+      issuer                 = "https://fairfx.onelogin.com/oidc/2"
+      token_endpoint         = "https://fairfx.onelogin.com/oidc/2/token"
+      user_info_endpoint     = "https://fairfx.onelogin.com/oidc/2/me"
+    }
+  }
 
   action {
     type             = "forward"
@@ -58,28 +71,14 @@ resource "aws_lb_listener_rule" "https" {
 
   condition {
     host_header {
-      values = [ var.listener_rule_condition_values ]
+      values = [var.listener_rule_condition_values]
     }
   }
-
   condition {
     path_pattern {
-      values = [ "/*" ]
+      values = ["/*"]
     }
   }
-
-  # action {
-  #   type = "authenticate-oidc"
-  #   authenticate_oidc {
-  #     authorization_endpoint = "https://fairfx.onelogin.com/oidc/2/auth"
-  #     client_id              = "repalce_with_real_id"
-  #     client_secret          = "repalce_with_real_secret"
-  #     issuer                 = "https://fairfx.onelogin.com/oidc/2"
-  #     token_endpoint         = "https://fairfx.onelogin.com/oidc/2/token"
-  #     user_info_endpoint     = "https://fairfx.onelogin.com/oidc/2/me"
-  #   }
-  # }
-
   # Changing the priority causes forces new resource, then network outage may occur.
   # So, specify resources are created before destroyed.
   lifecycle {
