@@ -47,3 +47,12 @@ module "ecs_deploy" {
 
   depends_on = [module.ecs_loadbalancer]
 }
+
+module "ecs_alarms" {
+  source       = "./modules/ecs/ecs-alarms"
+  cw_alarms    = true
+  cluster_name = module.ecs_cluster.aws_ecs_cluster_name
+  service_name = module.ecs_service.ecs_service_name
+  depends_on   = [ module.ecs_service, module.ecs_cluster ]
+  tags         = local.tags
+}
