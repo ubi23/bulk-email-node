@@ -48,6 +48,19 @@ Then, save the Sendgrid API key just generated in an environment variable as fol
 echo "export SENDGRID_API_KEY='YOUR_API_KEY'" > sendgrid.env
 source ./sendgrid.env
 ```
+### Database Migration
+
+Run the following to migrate the local database
+
+```bash
+npm run db:migrate
+```
+
+#### Notes on local database
+
+For local development we use a SQLite (a flatfile database). If you want to view the DB records download the SQLite Browser from (https://sqlitebrowser.org) and point it at the DB file location in your `.env` file (`storage/database/local.sqlite` by default)
+
+
 
 ### Run
 
