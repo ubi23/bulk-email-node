@@ -11,7 +11,6 @@ This repository is a web app version of the terminal solution that we were using
 - Jade View Engine
 - [NPM](https://www.npmjs.com/)
 
-Currently working on a branch to change the Jade view engine to [express-handlebars](https://github.com/ericf/express-handlebars)
 
 ## Development Guide
  

@@ -18,9 +18,7 @@ class Message {
     this.isDynamic = false;
     this.personalizations = [];
     this.html = 'Make sure this is never empty, otherwise you will get an error';
-    this.replyTo = { email: 'business@equalsmoney.com', name: 'Equals Money'}; // this is hard coded, may retrieve these values from env?
-
-
+    
     if (data) {
       this.fromData(data);
     }
@@ -41,12 +39,17 @@ class Message {
 
 
     const {
-      from, subject, templateId, category, // categories instead of category?
+      from,
+      replyTo,
+      subject,
+      templateId, 
+      category, 
       recipients
     } = data;
 
     // Set data
     this.setFrom(from);
+    this.setReplyTo(replyTo);
     this.setSubject(subject);
     this.setTemplateId(templateId);
     this.setCategory(category); // need to implement this according to specs setCategories?
@@ -133,7 +136,17 @@ class Message {
     }
   }
 
-  
+  /**
+   *  
+   */
+  setReplyTo(replyTo){
+
+    if (typeof replyTo !== 'string'){
+      throw new Error('Expecting a string as replyTo');
+    }
+
+    this.replyTo = replyTo;
+  }
 
   /**
    * 
@@ -171,17 +184,25 @@ class Message {
   toJSON(){
     
     const {
-      from, replyTo, subject, templateId,
-      personalizations, categories, html
+      from,
+      replyTo, 
+      subject, 
+      templateId,
+      personalizations, 
+      categories, 
+      html
     } = this;
 
     const json = {
-      html, replyTo, personalizations 
+      html, personalizations 
     };
 
     // check other properties exist
     if (typeof from !== 'undefined'){
       json.from = from;
+    }
+    if (typeof replyTo !== 'undefined'){
+      json.replyTo = replyTo;
     }
     if (typeof subject !== 'undefined'){
       json.subject = subject;
@@ -192,8 +213,6 @@ class Message {
     if (typeof categories !== 'undefined'){
       json.categories = categories;
     }
-
-    json.sendAt = 1613778240;
 
     return toSnakeCase(json, []); // here 'substitutions' needs to go in
   }
