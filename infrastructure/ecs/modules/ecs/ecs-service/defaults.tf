@@ -116,6 +116,22 @@ variable "ecs_parameters" {
   description = "List of parameters for ecs service"
 }
 
+variable "dblogging_secret" {
+  type = map(string)
+  default = {
+    username         = "pending to be added"
+    password         = "pending to be added"
+    "engine"         = "aurora-mysql"
+    "engine-version" = "5.7.mysql_aurora.2.07.2"
+    "engine-mode"    = "serverless"
+    "port"           = "3306"
+    "host"           = "pending to be added"
+    "dialect"        = "mysql"
+    "database"       = "main"
+  }
+  sensitive = true
+}
+
 locals {
   container_name         = var.container_name == "" ? var.tags.Service : var.container_name
   ecs_cluster_name       = var.ecs_cluster_name == "" ? var.tags.Name : var.ecs_cluster_name

@@ -83,5 +83,6 @@ resource "aws_lb_listener_rule" "oidc" {
   # So, specify resources are created before destroyed.
   lifecycle {
     create_before_destroy = true
+    ignore_changes = [ action ]
   }
 }
