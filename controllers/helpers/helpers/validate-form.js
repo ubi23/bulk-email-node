@@ -27,7 +27,9 @@ const validate = () => {
       .escape().trim().isBoolean().withMessage('Please specify this field.'),
 
     // TODO
-    //body('filename', 'no file uploaded').exists(), 
+    body('isCsvFile', 'Please upload a CSV file').exists().bail()
+      .escape().trim().isBoolean().toBoolean()
+      .custom(value => isCsvFile(value)).bail(), 
 
     body('fromName', 'Please insert your correct name')
       .exists(existsOptions).bail()
@@ -69,6 +71,18 @@ function checkTemplateIDFormatValidity(str){
   }
 
   return false;
+}
+
+/**
+ * 
+ */
+function isCsvFile(isCsvFile){
+
+  if (typeof isCsvFile !== 'boolean'){
+    throw new Error('Expecting a boolean as type of isCsvFile');
+  }
+
+  return isCsvFile;
 }
 
 /**
