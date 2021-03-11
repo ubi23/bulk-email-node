@@ -53,4 +53,3 @@ resource "random_password" "db_password" {
     pass_version = 1
   }
 }
-

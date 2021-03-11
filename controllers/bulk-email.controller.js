@@ -31,10 +31,11 @@ module.exports = async function(req, res) {
       email: req.body.fromEmail, 
       name: req.body.fromName
     },
+    replyTo: req.body.replyTo,
     templateId : req.body.templateID,
     subject : req.body.subject,
     category : req.body.category,
-    isSeparateSenders : req.body.isSeparate 
+    isSeparateSenders : req.body.isSeparate,
   };
   
   try {
@@ -45,7 +46,7 @@ module.exports = async function(req, res) {
     const recipients = retrieveRecipients(csvRows, data.isSeparateSenders); 
 
     // Send emails
-    sendgridController.sendBulkEmails(data, recipients); 
+    await sendgridController.sendBulkEmails(data, recipients); 
     
     return res.render('index', {success: 'Emails sent successfully!', }); 
   } catch(error) {
