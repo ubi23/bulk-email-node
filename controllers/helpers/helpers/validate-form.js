@@ -26,7 +26,6 @@ const validate = () => {
       .exists(existsOptions).bail()
       .escape().trim().isBoolean().withMessage('Please specify this field.'),
 
-    // TODO
     body('isCsvFile', 'Please upload a CSV file').exists().bail()
       .escape().trim().isBoolean().toBoolean()
       .custom(value => isCsvFile(value)).bail(), 
