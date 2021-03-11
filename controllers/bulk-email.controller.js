@@ -35,7 +35,7 @@ module.exports = async function(req, res) {
     templateId : req.body.templateID,
     subject : req.body.subject,
     category : req.body.category,
-    isSeparateSenders : req.body.isSeparate 
+    isSeparateSenders : req.body.isSeparate,
   };
   
   try {
