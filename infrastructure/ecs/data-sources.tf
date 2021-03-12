@@ -13,6 +13,11 @@ data "aws_subnet_ids" "private" {
   }
 }
 
+data "aws_subnet" "private" {
+  for_each = data.aws_subnet_ids.private.ids
+  id       = each.value
+}
+
 data "aws_subnet_ids" "public" {
   vpc_id = data.aws_vpc.main.id
 
