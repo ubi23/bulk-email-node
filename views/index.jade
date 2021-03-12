@@ -1,0 +1,48 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  form(name="sendEmail", action="/", method="POST", enctype="multipart/form-data")
+    div
+      input(name="filename", type="file", placeholder="Please select a file")
+    div
+      span 
+        | Save file
+      span
+        input(name="saveFile", type="radio", value="0", checked) 
+        | No 
+      span
+        input(name="saveFile", type="radio", value="1") 
+        | Yes
+    div
+      input(name="fromEmail", type="email", placeholder="From email", value=(undefined===formData ? '' : formData.fromEmail)) 
+    div
+      input(name="fromName", type="text", placeholder="From name", value=(undefined===formData ? '' : formData.fromName)) 
+    div
+      input(name="templateID", type="text", placeholder="Template ID", value=(undefined===formData ? '' : formData.templateID))
+    div
+      input(name="subject", type="text", placeholder="subject", value=(undefined===formData ? '' : formData.subject))
+    div
+      input(name="category", type="text", placeholder="category", value=(undefined===formData ? '' : formData.category))
+    div
+      span 
+        | Separate senders
+      span
+        input(name="isSeparate", type="radio", value="0", checked) 
+        | No 
+      span
+        input(name="isSeparate", type="radio", value="1") 
+        | Yes
+    div
+      button(type="submit", name="file") Send
+  if errors 
+    script console.log(#{errors})
+    for error in errors
+      div 
+        span 
+          | #{error.msg}
+        
+  if success  
+    span 
+      | #{success}

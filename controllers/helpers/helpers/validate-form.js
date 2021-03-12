@@ -84,7 +84,7 @@ module.exports = (req) => {
       
       const errorsArray = errors.array();
       validationStatus.hasValidationFailed = true;
-      console.log(errorsArray);
+      
       // Check if anyone tried to manipulate the form and send 
       // back an Internal Server Error
       errorsArray.forEach((error) => {

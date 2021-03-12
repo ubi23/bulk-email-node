@@ -51,6 +51,6 @@ module.exports = async function(req, res) {
   } catch(error) {
 
     console.error(error);
-    return res.render('form', {successFailed: 'An error occurred while processing the data!', }); // may want to change the key to a proper name rather than success
+    return res.render('index', {success: 'An error occurred while processing the data!', }); // may want to change the key to a proper name rather than success
   }
 }
