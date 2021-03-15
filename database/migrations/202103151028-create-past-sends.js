@@ -24,7 +24,7 @@ module.exports = {
           type: Sequelize.STRING(256)
       },
       subject: {
-          type: Sequelize.TEXT
+          type: Sequelize.STRING(256)
       },
       filename: {
           type: Sequelize.STRING(256)

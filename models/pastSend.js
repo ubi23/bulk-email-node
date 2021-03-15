@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: false
       },
       subject: {
-          type: DataTypes.TEXT
+          type: DataTypes.STRING(256)
       },
       filename: {
           type: DataTypes.STRING(256)
