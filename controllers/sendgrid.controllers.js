@@ -3,6 +3,7 @@
  */
 const sgMail = require('@sendgrid/mail');
 const Message = require('./helpers/classes/message');
+const SendgridInternalError = require('./helpers/errors/sendgrid-error');
 require('dotenv').config()
 
 // set the API Key from environment variables
@@ -66,7 +67,7 @@ async function sendEmails(msg) {
   })
   .catch(error => {
     // Log friendly error
-    console.error(error);
+    console.error('error occurred in sendgrid -> ',error);
 
     if (error.response) {
       // Extract error msg
@@ -77,6 +78,8 @@ async function sendEmails(msg) {
 
       console.error(body);
     }
+
+    throw new SendgridInternalError('An error inside sendgrid occurred');
   });
 }
 
