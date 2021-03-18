@@ -4,7 +4,6 @@ const multer = require('multer');
 const index = require('../controllers/index'); 
 const bulkEmail = require('../controllers/bulk-email.controller');
 const formValidator = require('../controllers/helpers/helpers/validate-form');
-const pastSends = require('../controllers/pastSends.controller.js');
 
 const upload = multer({ 
   // destination where the file will be uploaded temporarily
@@ -36,6 +35,6 @@ function handleFileUpload(req, res, next){
 router.get('/', index.index);
 
 /* Send all emails */
-router.post('/', upload.single('filename'), handleFileUpload, formValidator.validate(), bulkEmail, pastSends.create);
+router.post('/', upload.single('filename'), handleFileUpload, formValidator.validate(), bulkEmail);
 
 module.exports = router;

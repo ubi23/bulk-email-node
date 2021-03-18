@@ -1,22 +1,6 @@
 const db = require('../models');
 const PastSend = db.PastSend;
 
-// create a new history
-exports.create = (req, res) => {
-
-  PastSend
-    .create(req.body, {})
-    .then(data => {
-      console.log('created this data = ', data);
-    })
-    .catch(err => {
-      console.log('error occurred while creating a log ', err);
-      /*res.status(500).send({
-        message: err.message || "Some error occurred while creating a log"
-      });*/
-    });
-};
-
 // retrieve all orders from the db
 exports.findAll = (req, res) => {
   const userId = req.query.userId;

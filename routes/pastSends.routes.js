@@ -3,9 +3,6 @@ module.exports = app => {
 
   const router = require('express').Router();
 
-  // Create a new Transactions
-  router.post('/', pastSends.create);
-
   // Retrieve all Transactionss
   router.get('/', pastSends.findAll);
 

@@ -5,7 +5,10 @@ const parseCSV = require('./helpers/helpers/parse-csv');
 const sendgridController = require('./sendgrid.controllers');
 const handleValidationResult = require('./helpers/helpers/validate-form');
 const retrieveRecipients = require('./helpers/helpers/retrieve-recipients');
+const retrieveSubjectFromTemplateId = require('./helpers/helpers/retrieve-subject-from-template-id');
 const SendgridInternalError = require('./helpers/errors/sendgrid-error');
+const db = require('../models');
+const PastSend = db.PastSend;
 
 /**
 * 
@@ -47,17 +50,34 @@ module.exports = async function(req, res, next) {
 
     // Send emails
     await sendgridController.sendBulkEmails(data, recipients);
+
     req.body.filename = req.file.originalname;
     req.body.status = true;
-    next();
+    req.body.subject = await retrieveSubjectFromTemplateId(req.body.templateId); 
+    await PastSend
+      .create(req.body, {})
+      .then(data => {
+        console.log('created this data = ', data);
+      })
+      .catch(err => {
+        console.error('error occurred while creating a log ', err);
+      });
 
     return res.render('index', {success: 'Emails sent successfully!', });
-
   } catch(error) {
+
     console.error(error);
+
     req.body.filename = req.file.originalname;
     req.body.status = false;
-    next();
+    await PastSend
+      .create(req.body, {})
+      .then(data => {
+        console.log('created this data = ', data);
+      })
+      .catch(err => {
+        console.error('error occurred while creating a log ', err);
+      });    
 
     return res.render('index', {success: 'An error occurred while processing the data!', }); // may want to change the key to a proper name rather than success
   }
