@@ -1,0 +1,53 @@
+version: 0.2
+env:
+  shell: bash
+phases:
+  pre_build:
+    commands:
+      - echo "===========Running pre build==========="
+      # Login to the AWS private ECR
+      - eval $(aws ecr get-login --no-include-email --region eu-west-2)
+      # getting image tag
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+      # Repo URI
+      - REPOSITORY_URI=${AWS_ACCOUNT_ID}.dkr.ecr.eu-west-2.amazonaws.com/fairfxgroup/${APPLICATION_NAME}
+      - DOCKER_IMAGE=${REPOSITORY_URI}/${APPLICATION_NAME}
+      - REPOSITORY_NAME_APP=fairfxgroup/${APPLICATION_NAME}/${APPLICATION_NAME}
+  build:
+    commands:
+      - echo "===========Running Build packages==========="
+      # Build and tag the new docker image.
+      - docker build 
+        --build-arg NPM_TOKEN=${NPM_TOKEN}
+        -t ${DOCKER_IMAGE} .
+      - docker tag ${DOCKER_IMAGE}:latest ${DOCKER_IMAGE}:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo "===========Running Post Build packages==========="
+      # Push docker images to ECR
+      - docker push ${DOCKER_IMAGE}:$IMAGE_TAG
+      - docker push ${DOCKER_IMAGE}:latest
+      # Retrieving image scan findings
+      - ./infrastructure/pipeline/config/scan-ecr-image.sh $REPOSITORY_NAME_APP $IMAGE_TAG
+      # Writing image definitions file...
+      - printf '{"ImageURI":"%s"}' ${REPOSITORY_URI}/${APPLICATION_NAME}:$IMAGE_TAG > ./imageDetail.json
+      # We substitute every environment variable in the appspec_template.yaml with envsubst
+      - envsubst < infrastructure/pipeline/config/appspec-template.yaml > appspec.yaml
+      # Creating task definition file
+      - envsubst < infrastructure/pipeline/config/task-definition.json.tmpl > task-definition.json
+
+artifacts:
+  secondary-artifacts:
+    node:
+      files:
+        - imageDetail.json
+    configfiles:
+      files:
+        - appspec.yaml
+        - task-definition.json
+
+cache:
+  paths:
+    - node_modules/**/*
+    - ~/usr/local/lib/node_modules # location depends on npm version
