@@ -27,8 +27,6 @@ variable "ecs_parameters" {
     "shared" = {
       max_tasks                    = "1"
       min_tasks                    = "1"
-      autoscaling_cpu_threshold    = "85"
-      autoscaling_memory_threshold = "85"
       desired_count                = "1"
       action_on_timeout            = "CONTINUE_DEPLOYMENT"
       container_port               = "3000"
