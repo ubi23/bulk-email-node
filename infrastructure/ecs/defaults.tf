@@ -25,7 +25,7 @@ variable "ecs_parameters" {
   type = map(map(string))
   default = {
     "shared" = {
-      max_tasks                    = "2"
+      max_tasks                    = "1"
       min_tasks                    = "1"
       autoscaling_cpu_threshold    = "85"
       autoscaling_memory_threshold = "85"

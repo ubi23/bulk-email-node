@@ -1,3 +1,11 @@
+resource "aws_appautoscaling_target" "ecs" {
+  service_namespace  = "ecs"
+  resource_id        = "service/${local.ecs_cluster_name}/${aws_ecs_service.with_lb_deployment.name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  max_capacity       = local.max_tasks
+  min_capacity       = local.min_tasks
+  depends_on         = [ aws_ecs_service.with_lb_deployment ]
+}
 
 resource "aws_appautoscaling_scheduled_action" "app_autoscale_time_up" {
   name = "app-autoscale-time-up-${var.tags.Service}-appautoscaling"
