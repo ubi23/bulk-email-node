@@ -13,7 +13,8 @@ block content
               th(scope='col') From Name
               th(scope='col') Template ID 
               th(scope='col') Subject 
-              th(scope='col') Filename 
+              th(scope='col') Filename
+              th(scope='col') Type 
               th(scope='col') Status 
               th(scope='col') Sent at
         tbody
@@ -32,6 +33,11 @@ block content
               td 
                 | #{log.filename}
               
+              if log.emailType == true   
+                td Dealers 
+              else  
+                td Normal
+
               if log.status == true   
                 td OK 
               else  

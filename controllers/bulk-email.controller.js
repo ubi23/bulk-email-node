@@ -53,7 +53,8 @@ module.exports = async function(req, res, next) {
 
     req.body.filename = req.file.originalname;
     req.body.status = true;
-    req.body.subject = await retrieveSubjectFromTemplateId(req.body.templateId); 
+    req.body.subject = await retrieveSubjectFromTemplateId(req.body.templateId);
+    req.body.emailType = req.body.isSeparate; // 0 for normal emails, 1 for dealers' emails 
     await PastSend
       .create(req.body, {})
       .then(data => {
@@ -70,6 +71,7 @@ module.exports = async function(req, res, next) {
 
     req.body.filename = req.file.originalname;
     req.body.status = false;
+    req.body.emailType = req.body.isSeparate;
     await PastSend
       .create(req.body, {})
       .then(data => {
