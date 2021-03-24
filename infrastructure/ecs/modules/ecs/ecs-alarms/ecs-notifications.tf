@@ -7,7 +7,7 @@ resource "aws_sns_topic" "ecs_alarms" {
 # CloudWatch Metrics
 resource "aws_cloudwatch_metric_alarm" "cpu_utilization_high" {
   count               = var.cw_alarms ? 1 : 0
-  alarm_name          = "${var.service_name}-alarm-ecs-cpu-utilization-high"
+  alarm_name          = "${var.tags.Service}-alarm-ecs-cpu-utilization-high"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = var.cpu_utilization_high_evaluation_periods
   metric_name         = "CPUUtilization"
@@ -25,14 +25,14 @@ resource "aws_cloudwatch_metric_alarm" "cpu_utilization_high" {
     var.cpu_utilization_high_evaluation_periods
   )
   alarm_actions = [aws_sns_topic.ecs_alarms[0].id]
-  ok_actions    = [aws_sns_topic.ecs_alarms[0].id]
+  # ok_actions    = [aws_sns_topic.ecs_alarms[0].id]
 
   dimensions = local.dimensions_map[var.service_name == "" ? "cluster" : "service"]
 }
 
 resource "aws_cloudwatch_metric_alarm" "memory_utilization_high" {
   count               = var.cw_alarms ? 1 : 0
-  alarm_name          = "${var.service_name}-alarm-ecs-memory-utilization-high"
+  alarm_name          = "${var.tags.Service}-alarm-ecs-memory-utilization-high"
   comparison_operator = "GreaterThanThreshold"
   evaluation_periods  = var.memory_utilization_high_evaluation_periods
   metric_name         = "MemoryUtilization"
@@ -50,14 +50,14 @@ resource "aws_cloudwatch_metric_alarm" "memory_utilization_high" {
     var.memory_utilization_high_evaluation_periods
   )
   alarm_actions = [aws_sns_topic.ecs_alarms[0].id]
-  ok_actions    = [aws_sns_topic.ecs_alarms[0].id]
+  # ok_actions    = [aws_sns_topic.ecs_alarms[0].id]
 
   dimensions = local.dimensions_map[var.service_name == "" ? "cluster" : "service"]
 }
 
 resource "aws_cloudwatch_metric_alarm" "running_task_count_0" {
   count               = var.cw_alarms ? 1 : 0
-  alarm_name          = "${var.service_name}-alarm-ecs-running_task_count_0"
+  alarm_name          = "${var.tags.Service}-alarm-ecs-running_task_count_0"
   comparison_operator = "LessThanOrEqualToThreshold"
   evaluation_periods  = var.cpu_utilization_high_evaluation_periods
   metric_name         = "MemoryUtilization"
@@ -69,7 +69,7 @@ resource "aws_cloudwatch_metric_alarm" "running_task_count_0" {
 
   alarm_description = "ECS Count task running 0 Alarm for cluster ${var.cluster_name} and service ${var.service_name}"
   alarm_actions     = [aws_sns_topic.ecs_alarms[0].id]
-  ok_actions        = [aws_sns_topic.ecs_alarms[0].id]
+  # ok_actions        = [aws_sns_topic.ecs_alarms[0].id]
 
   dimensions = local.dimensions_map[var.service_name == "" ? "cluster" : "service"]
 }

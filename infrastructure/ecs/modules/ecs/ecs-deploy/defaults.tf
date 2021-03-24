@@ -30,7 +30,7 @@ variable "auto_rollback_enabled" {
 }
 
 variable "auto_rollback_events" {
-  default = ["DEPLOYMENT_FAILURE"]
+  default = ["DEPLOYMENT_FAILURE", "DEPLOYMENT_STOP_ON_ALARM"]
 }
 
 variable "action_on_timeout" {
@@ -45,7 +45,7 @@ variable "wait_time_in_minutes" {
 
 variable "termination_wait_time_in_minutes" {
   type    = number
-  default = 1
+  default = 15
 }
 
 variable "test_traffic_route_listener_arns" {

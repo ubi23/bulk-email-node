@@ -7,7 +7,7 @@ resource "aws_sns_topic" "db_alarms" {
 # CloudWatch Metrics
 resource "aws_cloudwatch_metric_alarm" "alarm_rds_DatabaseConnections" {
   count               = var.cw_alarms ? 1 : 0
-  alarm_name          = "${var.cluster_identifier}-alarm-rds-DatabaseConnections"
+  alarm_name          = "${var.tags.Service}-alarm-rds-database-connections"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = var.cw_eval_period_connections
   metric_name         = "DatabaseConnections"
@@ -15,9 +15,10 @@ resource "aws_cloudwatch_metric_alarm" "alarm_rds_DatabaseConnections" {
   period              = "60"
   statistic           = "Sum"
   threshold           = var.cw_max_conns
+  treat_missing_data  = "notBreaching"
   alarm_description   = "RDS Maximum connection Alarm for ${var.cluster_identifier} writer"
   alarm_actions       = [aws_sns_topic.db_alarms[0].id]
-  ok_actions          = [aws_sns_topic.db_alarms[0].id]
+  # ok_actions          = [aws_sns_topic.db_alarms[0].id]
 
   dimensions = {
     DBClusterIdentifier = var.cluster_identifier
@@ -27,7 +28,7 @@ resource "aws_cloudwatch_metric_alarm" "alarm_rds_DatabaseConnections" {
 
 resource "aws_cloudwatch_metric_alarm" "alarm_rds_CPU" {
   count               = var.cw_alarms ? 1 : 0
-  alarm_name          = "${var.cluster_identifier}-alarm-rds-CPU"
+  alarm_name          = "${var.tags.Service}-alarm-rds-cpu"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   evaluation_periods  = var.cw_eval_period_cpu
   metric_name         = "CPUUtilization"
@@ -35,9 +36,10 @@ resource "aws_cloudwatch_metric_alarm" "alarm_rds_CPU" {
   period              = "60"
   statistic           = "Maximum"
   threshold           = var.cw_max_cpu
+  treat_missing_data  = "notBreaching"
   alarm_description   = "RDS CPU Alarm for ${var.cluster_identifier} writer"
   alarm_actions       = [aws_sns_topic.db_alarms[0].id]
-  ok_actions          = [aws_sns_topic.db_alarms[0].id]
+  # ok_actio ns          = [aws_sns_topic.db_alarms[0].id]
 
   dimensions = {
     DBClusterIdentifier = var.cluster_identifier
