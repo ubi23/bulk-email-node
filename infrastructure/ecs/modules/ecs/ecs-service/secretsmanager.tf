@@ -1,7 +1,7 @@
 resource "aws_secretsmanager_secret" "sendgrid_api_key" {
   name                    = "/${var.tags.Service}/${var.tags.Environment}/SENDGRID_API_KEY"
   description             = "SENDGRID_API_KEY to send emails"
-  recovery_window_in_days = 0 // change to 30 when development is finished 
+  recovery_window_in_days = 30 // change to 30 when development is finished 
   tags                    = var.tags
 }
 
@@ -17,7 +17,7 @@ EOF
 resource "aws_secretsmanager_secret" "rds_secret" {
   name                    = "/${var.tags.Service}/${var.tags.Environment}/db-logging"
   description             = "DB credentials"
-  recovery_window_in_days = 0 // change to 30 when development is finished 
+  recovery_window_in_days = 30 // change to 30 when development is finished 
   tags                    = var.tags
 }
 

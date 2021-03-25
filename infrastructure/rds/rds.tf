@@ -28,7 +28,7 @@ module "aurora_db_cluster" {
 
 module "aurora_db_alarms" {
   source             = "./modules/rds-alarms"
-  cw_alarms          = true
+  cw_alarms          = local.environment == "shared" ? true : false
   cluster_identifier = module.aurora_db_cluster.cluster_identifier
   depends_on         = [ module.aurora_db_cluster ]
   tags               = module.common.tags

@@ -61,10 +61,10 @@ resource "aws_codedeploy_deployment_group" "main" {
     alarms  = [
       "${var.tags.Service}-alarm-ecs-cpu-utilization-high",
       "${var.tags.Service}-alarm-ecs-memory-utilization-high",
-      "${var.tags.Service}-alarm-ecs-running_task_count_0",
-      "${var.tags.Service}-alarm-rds-database-connections",
+      "${var.tags.Service}-alarm-rds-anomaly-database-connections",
       "${var.tags.Service}-alarm-rds-cpu",
       "${var.tags.Service}-alarm-alb-errors-count",
+      "${var.tags.Service}-alarm-alb-anomaly-active-connections",
       "${var.tags.Service}-alarm-target-errors-count"
     ]
     enabled = true
@@ -72,6 +72,6 @@ resource "aws_codedeploy_deployment_group" "main" {
   }
 
   lifecycle {
-    ignore_changes = [load_balancer_info, alarm_configuration]
+    ignore_changes = [load_balancer_info]
   }
 }

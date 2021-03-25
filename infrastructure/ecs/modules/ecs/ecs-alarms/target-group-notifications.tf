@@ -1,8 +1,9 @@
 resource "aws_cloudwatch_metric_alarm" "target_errors_count" {
   count               = var.cw_alarms ? 1 : 0
+  actions_enabled     = "true"
   alarm_name          = "${var.tags.Service}-alarm-target-errors-count"
   comparison_operator = "GreaterThanThreshold"
-  evaluation_periods  = "1"
+  evaluation_periods  = var.errors_count_evaluation_periods
   threshold           = "0"
   alarm_description   = "Request error rate on ALB was exceeded"
   treat_missing_data  = "notBreaching"
@@ -19,7 +20,7 @@ resource "aws_cloudwatch_metric_alarm" "target_errors_count" {
     metric {
       metric_name = "UnHealthyHostCount"
       namespace   = "AWS/ApplicationELB"
-      period      = "60"
+      period      = var.errors_count_period
       stat        = "Sum"
       dimensions = {
         LoadBalancer = data.aws_lb.main.arn_suffix
@@ -32,7 +33,7 @@ resource "aws_cloudwatch_metric_alarm" "target_errors_count" {
     metric {
       metric_name = "UnHealthyHostCount"
       namespace   = "AWS/ApplicationELB"
-      period      = "60"
+      period      = var.errors_count_period
       stat        = "Sum"
       dimensions = {
         LoadBalancer = data.aws_lb.main.arn_suffix
@@ -45,7 +46,7 @@ resource "aws_cloudwatch_metric_alarm" "target_errors_count" {
     metric {
       metric_name = "TargetTLSNegotiationErrorCount"
       namespace   = "AWS/ApplicationELB"
-      period      = "60"
+      period      = var.errors_count_period
       stat        = "Sum"
       dimensions = {
         LoadBalancer = data.aws_lb.main.arn_suffix
@@ -58,7 +59,7 @@ resource "aws_cloudwatch_metric_alarm" "target_errors_count" {
     metric {
       metric_name = "TargetTLSNegotiationErrorCount"
       namespace   = "AWS/ApplicationELB"
-      period      = "60"
+      period      = var.errors_count_period
       stat        = "Sum"
       dimensions = {
         LoadBalancer = data.aws_lb.main.arn_suffix
@@ -71,7 +72,7 @@ resource "aws_cloudwatch_metric_alarm" "target_errors_count" {
     metric {
       metric_name = "HTTPCode_Target_5XX_Count"
       namespace   = "AWS/ApplicationELB"
-      period      = "60"
+      period      = var.errors_count_period
       stat        = "Sum"
       dimensions = {
         LoadBalancer = data.aws_lb.main.arn_suffix
@@ -84,7 +85,7 @@ resource "aws_cloudwatch_metric_alarm" "target_errors_count" {
     metric {
       metric_name = "HTTPCode_Target_5XX_Count"
       namespace   = "AWS/ApplicationELB"
-      period      = "60"
+      period      = var.errors_count_period
       stat        = "Sum"
       dimensions = {
         LoadBalancer = data.aws_lb.main.arn_suffix
@@ -97,7 +98,7 @@ resource "aws_cloudwatch_metric_alarm" "target_errors_count" {
     metric {
       metric_name = "TargetConnectionErrorCount"
       namespace   = "AWS/ApplicationELB"
-      period      = "60"
+      period      = var.errors_count_period
       stat        = "Sum"
       dimensions = {
         LoadBalancer = data.aws_lb.main.arn_suffix
@@ -110,7 +111,7 @@ resource "aws_cloudwatch_metric_alarm" "target_errors_count" {
     metric {
       metric_name = "TargetConnectionErrorCount"
       namespace   = "AWS/ApplicationELB"
-      period      = "60"
+      period      = var.errors_count_period
       stat        = "Sum"
       dimensions = {
         LoadBalancer = data.aws_lb.main.arn_suffix
@@ -118,4 +119,5 @@ resource "aws_cloudwatch_metric_alarm" "target_errors_count" {
       }
     }
   }
+  tags = var.tags
 }
