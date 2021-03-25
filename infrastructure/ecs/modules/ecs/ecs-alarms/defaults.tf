@@ -55,10 +55,22 @@ variable "cpu_utilization_high_evaluation_periods" {
   default     = 1
 }
 
+variable "errors_count_evaluation_periods" {
+  type        = number
+  description = "Number of periods to evaluate for the alarm"
+  default     = 1
+}
+
 variable "cpu_utilization_high_period" {
   type        = number
   description = "Duration in seconds to evaluate for the alarm"
   default     = 300
+}
+
+variable "errors_count_period" {
+  type        = number
+  description = "Duration in seconds to evaluate for the alarm"
+  default     = 60
 }
 
 variable "count_tasks_0" {

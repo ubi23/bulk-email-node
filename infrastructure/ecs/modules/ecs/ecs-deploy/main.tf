@@ -24,7 +24,7 @@ resource "aws_codedeploy_deployment_group" "main" {
 
     terminate_blue_instances_on_deployment_success {
       action                           = "TERMINATE"
-      termination_wait_time_in_minutes = var.termination_wait_time_in_minutes
+      termination_wait_time_in_minutes = var.tags.Environment == "shared" ? var.termination_wait_time_in_minutes : 1
     }
   }
 
@@ -55,6 +55,20 @@ resource "aws_codedeploy_deployment_group" "main" {
         listener_arns = var.test_traffic_route_listener_arns
       }
     }
+  }
+
+  alarm_configuration {
+    alarms  = [
+      "${var.tags.Service}-alarm-ecs-cpu-utilization-high",
+      "${var.tags.Service}-alarm-ecs-memory-utilization-high",
+      "${var.tags.Service}-alarm-rds-anomaly-database-connections",
+      "${var.tags.Service}-alarm-rds-cpu",
+      "${var.tags.Service}-alarm-alb-errors-count",
+      "${var.tags.Service}-alarm-alb-anomaly-active-connections",
+      "${var.tags.Service}-alarm-target-errors-count"
+    ]
+    enabled = true
+    ignore_poll_alarm_failure = false
   }
 
   lifecycle {

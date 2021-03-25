@@ -45,3 +45,8 @@ variable "tags" {
   description = "Common tags"
   type        = map(string)
 }
+
+variable "cw_alarms" {
+  type    = string
+  default = "ENABLED"
+}
