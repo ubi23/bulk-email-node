@@ -106,13 +106,7 @@ variable "platform_version" {
 
 variable "ecs_parameters" {
   type = map(string)
-  default = {
-    max_tasks                    = "3" // leave this as the default (-1), if you would like to use the multiplier (max_tasks_multiplier) instead - this recommended for the equal distribution of tasks across multiple AZs
-    min_tasks                    = "1"
-    autoscaling_cpu_threshold    = "85" // autoscalling threshold for cpu usage percentag
-    autoscaling_memory_threshold = "85" // autoscalling threshold for memory usage percentage
-    desired_count                = "1"  // desired number of task running in the cluster
-  }
+  default = {}
   description = "List of parameters for ecs service"
 }
 

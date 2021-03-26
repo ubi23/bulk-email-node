@@ -27,17 +27,17 @@ data "aws_subnet_ids" "public" {
 }
 
 data "aws_acm_certificate" "fairfx" {
-  domain   = var.ecs_parameters[local.environment].domain
+  domain   = var.ecs_parameters[local.envtype].domain
   statuses = ["ISSUED"]
 }
 
 data "aws_route53_zone" "service_discovery_namespace" {
-  name         = var.ecs_parameters[local.environment].service_discovery_domain
+  name         = var.ecs_parameters[local.envtype].service_discovery_domain
   private_zone = true
 }
 
 data "aws_route53_zone" "api_domain" {
   provider     = aws.dns
-  name         = "${var.ecs_parameters[local.environment].domain}."
+  name         = "${var.ecs_parameters[local.envtype].domain}."
   private_zone = false
 }

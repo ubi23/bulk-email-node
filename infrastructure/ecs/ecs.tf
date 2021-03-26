@@ -29,7 +29,7 @@ module "ecs_service" {
   aws_lb_listener_https_arn                      = module.ecs_loadbalancer.listener_https_arn
   aws_lb_target_group_arn                        = module.ecs_loadbalancer.aws_lb_target_group_arn
   platform_version                               = "1.4.0"
-  ecs_parameters                                 = var.ecs_parameters[local.environment]
+  ecs_parameters                                 = var.ecs_parameters[local.envtype]
   tags                                           = local.tags
 }
 
@@ -42,7 +42,7 @@ module "ecs_deploy" {
   lb_listener_arn                = module.ecs_loadbalancer.listener_https_arn
   blue_lb_target_group_name      = module.ecs_loadbalancer.aws_lb_target_group_name
   listener_rule_condition_values = aws_route53_record.api_endpoint.name
-  action_on_timeout              = var.ecs_parameters[local.environment].action_on_timeout
+  action_on_timeout              = var.ecs_parameters[local.envtype].action_on_timeout
   tags                           = local.tags
 
   depends_on = [module.ecs_loadbalancer]
@@ -50,9 +50,9 @@ module "ecs_deploy" {
 
 module "ecs_alarms" {
   source       = "./modules/ecs/ecs-alarms"
-  cw_alarms    = true
+  cw_alarms    = local.envtype == "production" ? true : false
   cluster_name = module.ecs_cluster.aws_ecs_cluster_name
   service_name = module.ecs_service.ecs_service_name
-  depends_on   = [ module.ecs_service, module.ecs_cluster ]
+  depends_on   = [ module.ecs_service, module.ecs_cluster, module.ecs_loadbalancer ]
   tags         = local.tags
 }

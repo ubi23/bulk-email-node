@@ -16,10 +16,16 @@ variable "cw_eval_period_connections" {
   description = "Evaluation period for the DB connections alarms"
 }
 
-variable "cw_max_conns" {
+variable "cw_period" {
   type        = string
-  default     = "50"
-  description = "Connection count beyond which to trigger a CloudWatch alarm"
+  default     = "300"
+  description = "The period in seconds over which the specified statistic is applied"
+}
+
+variable "cw_datapoints_to_alarm" {
+  type        = string
+  default     = "1"
+  description = "The number of datapoints that must be breaching to trigger the alarm"
 }
 
 variable "cw_max_cpu" {
@@ -30,7 +36,7 @@ variable "cw_max_cpu" {
 
 variable "cw_eval_period_cpu" {
   type        = string
-  default     = "2"
+  default     = "1"
   description = "Evaluation period for the DB CPU alarms"
 }
 
