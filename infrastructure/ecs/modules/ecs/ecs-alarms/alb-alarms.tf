@@ -81,11 +81,11 @@ resource "aws_cloudwatch_metric_alarm" "alb_errors_count" {
 resource "aws_cloudwatch_metric_alarm" "alb_anomaly_active_connections" {
   count               = var.cw_alarms ? 1 : 0
   actions_enabled     = "true"
-  alarm_description   = "Anomaly band (10 / 5 min)"
+  alarm_description   = "Anomaly band for active count of connections"
   alarm_name          = "${var.tags.Service}-alarm-alb-anomaly-active-connections"
   comparison_operator = "LessThanLowerOrGreaterThanUpperThreshold"
-  datapoints_to_alarm = "1"
-  evaluation_periods  = "1"
+  datapoints_to_alarm = var.anomaly_active_connections_datapoints
+  evaluation_periods  = var.anomaly_active_connections_evaluation_periods
   treat_missing_data  = "missing"
   threshold_metric_id = "ad1"
 
@@ -95,8 +95,8 @@ resource "aws_cloudwatch_metric_alarm" "alb_anomaly_active_connections" {
     metric {
       metric_name = "ActiveConnectionCount"
       namespace   = "AWS/ApplicationELB"
-      period      = "300"
-      stat        = "Maximum"
+      period      = var.anomaly_active_connections_period
+      stat        = "Sum"
 
       dimensions = {
         LoadBalancer = data.aws_lb.main.arn_suffix
@@ -105,7 +105,7 @@ resource "aws_cloudwatch_metric_alarm" "alb_anomaly_active_connections" {
   }
   metric_query {
     id          = "ad1"
-    expression  = "ANOMALY_DETECTION_BAND(m1, 10)"
+    expression  = "ANOMALY_DETECTION_BAND(m1, 12)" // the second parameter is the standard deviations to use for the band, default is 2
     label       = "Active connection count band"
     return_data = "true"
   }

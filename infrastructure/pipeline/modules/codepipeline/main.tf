@@ -74,5 +74,9 @@ resource "aws_codepipeline" "main" {
       run_order = 4
     }
   }
+  # Workaround for Terraform insisting on "updating" OAuthToken every run.
+  lifecycle {
+    ignore_changes = [stage[0].action[0].configuration.OAuthToken]
+  }
   tags = var.tags
 }
