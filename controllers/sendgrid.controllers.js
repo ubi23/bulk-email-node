@@ -3,6 +3,7 @@
  */
 const sgMail = require('@sendgrid/mail');
 const Message = require('./helpers/classes/message');
+const SendgridInternalError = require('./helpers/errors/sendgrid-error');
 require('dotenv').config()
 
 // set the API Key from environment variables
@@ -25,17 +26,17 @@ module.exports.sendBulkEmails = async (data, recipients) => {
 
   // check if different senders
   if (data.isSeparateSenders === true){
-    
-    const promises = recipients.map((dealerData, dealerEmail) => {
+    const promises = [];
+    recipients.forEach((dealerData, dealerEmail) => {
       // Change the from value to be the dealer's name and email rather than what was provided in the form
       data.from = { email: dealerEmail, name: dealerData.dealerName};
       data.replyTo = dealerEmail;
       let dealerRecipients = dealerData.recipients;
 
       if (dealerRecipients.length <= SENDGRID_MAX_RECIPIENTS){
-        return send(dealerRecipients, data);
+        promises.push(send(dealerRecipients, data));
       } else {
-        return sendInChunks(dealerRecipients, data);        
+        promises.push(sendInChunks(dealerRecipients, data));        
       }
     });
     return Promise.all(promises);
@@ -66,7 +67,7 @@ async function sendEmails(msg) {
   })
   .catch(error => {
     // Log friendly error
-    console.error(error);
+    console.error('error occurred in sendgrid -> ',error);
 
     if (error.response) {
       // Extract error msg
@@ -77,6 +78,8 @@ async function sendEmails(msg) {
 
       console.error(body);
     }
+
+    throw new SendgridInternalError('An error inside sendgrid occurred');
   });
 }
 

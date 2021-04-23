@@ -4,7 +4,8 @@
 const parseCSV = require('./helpers/helpers/parse-csv');
 const sendgridController = require('./sendgrid.controllers');
 const handleValidationResult = require('./helpers/helpers/validate-form');
-const retrieveRecipients = require('./helpers/helpers/retrieve-recipients')
+const retrieveRecipients = require('./helpers/helpers/retrieve-recipients');
+const SendgridInternalError = require('./helpers/errors/sendgrid-error');
 
 /**
  * 
@@ -33,7 +34,6 @@ module.exports = async function(req, res) {
     },
     replyTo: req.body.replyTo,
     templateId : req.body.templateID,
-    subject : req.body.subject,
     category : req.body.category,
     isSeparateSenders : req.body.isSeparate,
   };
@@ -50,8 +50,11 @@ module.exports = async function(req, res) {
     
     return res.render('index', {success: 'Emails sent successfully!', }); 
   } catch(error) {
-
     console.error(error);
+    if (error instanceof SendgridInternalError) {
+      return res.render('index', {success: error.message, }); // may want to change the key to a proper name rather than success
+    }
+    
     return res.render('index', {success: 'An error occurred while processing the data!', }); // may want to change the key to a proper name rather than success
   }
 }

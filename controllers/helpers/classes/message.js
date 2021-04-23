@@ -50,7 +50,7 @@ class Message {
     // Set data
     this.setFrom(from);
     this.setReplyTo(replyTo);
-    this.setSubject(subject);
+    //this.setSubject(subject);
     this.setTemplateId(templateId);
     this.setCategory(category); // need to implement this according to specs setCategories?
     this.setRecipients(recipients);
