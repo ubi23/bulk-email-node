@@ -73,6 +73,24 @@ variable "errors_count_period" {
   default     = 60
 }
 
+variable "anomaly_active_connections_period" {
+  type        = number
+  description = "Duration in seconds to evaluate for the alarm"
+  default     = 60
+}
+
+variable "anomaly_active_connections_datapoints" {
+  type        = number
+  description = "The number of datapoints that must be breaching to trigger the alarm"
+  default     = 3
+}
+
+variable "anomaly_active_connections_evaluation_periods" {
+  type        = number
+  description = "The number of periods over which data is compared to the specified threshold"
+  default     = 5
+}
+
 variable "count_tasks_0" {
   type        = number
   description = "Duration in seconds to evaluate for the alarm"
