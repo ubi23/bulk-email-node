@@ -35,7 +35,7 @@ const validate = () => {
       .escape().trim().isAlpha('en-GB', {ignore: " "}).withMessage('Please do no insert digits in your name.').bail()
       .notEmpty(),
 
-    body('templateID', 'Please insert a correct template ID')
+    body('templateId', 'Please insert a correct template ID')
       .exists(existsOptions).bail()
       .escape().trim().custom(templateID => checkTemplateIDFormatValidity(templateID)).bail()
       .isLength({min: 34, max:36}).bail()
